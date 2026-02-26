@@ -5,68 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
     <!-- SEO & Social Sharing -->
-    <title>英语单词大闯关 | 基础词汇特训</title>
-    <meta name="description" content="趣味英语单词填空游戏，包含100+基础高频词汇，支持发音、提示与错题复习。">
-    <meta property="og:title" content="英语单词大闯关">
-    <meta property="og:description" content="每天10个词，轻松记单词！">
+    <title>英语单词大闯关 V2.3 | 难度分级版</title>
+    <meta name="description" content="趣味英语单词填空游戏，支持简单、困难、地狱三种难度，智能错题复习。">
     
-    <!-- Mobile App Experience (iOS/Android) -->
+    <!-- Mobile App Experience -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#e0c3fc">
     <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=En&background=6c5ce7&color=fff&rounded=true">
-    <link rel="shortcut icon" href="https://ui-avatars.com/api/?name=En&background=6c5ce7&color=fff&rounded=true">
 
     <style>
         :root {
-            --primary-color: #4facfe;
-            --secondary-color: #00f2fe;
-            --accent-color: #ff9a9e;
-            --text-color: #2d3436;
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* 更柔和的护眼背景 */
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             --card-bg: rgba(255, 255, 255, 0.96);
-            --input-border: #dfe6e9;
-            --success: #2ecc71;
-            --error: #e74c3c;
-            --warn: #f1c40f;
+            --text-color: #2d3436;
+            --success: #00b894;
+            --error: #d63031;
+            --warn: #fdcb6e;
+            --diff-easy: #00b894;
+            --diff-hard: #e17055;
+            --diff-hell: #6c5ce7;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
             background: var(--bg-gradient);
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--text-color);
-            overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
+            margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center;
+            color: var(--text-color); overflow-x: hidden; -webkit-tap-highlight-color: transparent;
         }
 
-        /* 粒子画布 */
         #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
 
         .container {
-            width: 90%;
-            max-width: 600px;
-            background: var(--card-bg);
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-            padding: 2.5rem 2rem;
-            text-align: center;
-            position: relative;
-            backdrop-filter: blur(12px);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            z-index: 10;
+            width: 90%; max-width: 600px; background: var(--card-bg); border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08); padding: 2.5rem 2rem; text-align: center;
+            position: relative; backdrop-filter: blur(12px); z-index: 10;
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
-        h1 { color: #5352ed; margin: 0 0 0.5rem 0; font-size: 1.8rem; letter-spacing: -0.5px; }
-        p { color: #636e72; margin-bottom: 2rem; font-size: 0.95rem; }
+        h1 { color: var(--primary-color); margin: 0 0 0.5rem 0; font-size: 1.8rem; letter-spacing: -0.5px; }
+        p { color: #636e72; margin-bottom: 1.5rem; font-size: 0.95rem; }
 
-        /* 按钮系统 */
+        /* 难度选择器 */
+        .diff-selector {
+            display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; background: #f1f2f6;
+            padding: 5px; border-radius: 30px; position: relative;
+        }
+        .diff-btn {
+            flex: 1; padding: 10px 0; cursor: pointer; border-radius: 25px; font-weight: 600; font-size: 0.9rem;
+            color: #b2bec3; transition: all 0.3s; display: flex; flex-direction: column; align-items: center; line-height: 1.2;
+        }
+        .diff-btn small { font-size: 0.7rem; font-weight: normal; opacity: 0.8; }
+        
+        /* 选中状态 */
+        .diff-btn.active[data-val="easy"] { background: white; color: var(--diff-easy); box-shadow: 0 2px 10px rgba(0,184,148,0.2); }
+        .diff-btn.active[data-val="hard"] { background: white; color: var(--diff-hard); box-shadow: 0 2px 10px rgba(225,112,85,0.2); }
+        .diff-btn.active[data-val="hell"] { background: white; color: var(--diff-hell); box-shadow: 0 2px 10px rgba(108,92,231,0.2); }
+
+        /* 按钮 */
         .btn {
-            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white; border: none; padding: 14px 28px; font-size: 1rem; border-radius: 30px;
             cursor: pointer; transition: all 0.2s; font-weight: 600; margin: 8px;
             display: inline-flex; align-items: center; justify-content: center; gap: 6px;
@@ -74,100 +74,69 @@
         }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4); }
         .btn:active { transform: scale(0.98); }
-        
-        .btn-outline { background: transparent; border: 2px solid #6c5ce7; color: #6c5ce7; box-shadow: none; }
-        .btn-outline:hover { background: #6c5ce7; color: white; }
-        .btn-small { padding: 6px 16px; font-size: 0.85rem; height: auto; }
-        .btn-icon { background: rgba(0,0,0,0.05); color: #6c5ce7; font-size: 1.4rem; padding: 8px; border-radius: 50%; width: 40px; height: 40px; box-shadow: none; }
-        .btn-icon:hover { background: rgba(108, 92, 231, 0.1); transform: rotate(10deg); }
+        .btn-outline { background: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); box-shadow: none; }
+        .btn-outline:hover { background: var(--primary-color); color: white; }
+        .btn-small { padding: 6px 16px; font-size: 0.85rem; }
+        .btn-icon { background: rgba(0,0,0,0.05); color: var(--primary-color); font-size: 1.4rem; padding: 8px; border-radius: 50%; width: 40px; height: 40px; box-shadow: none; }
 
         /* 游戏界面 */
         .game-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .level-badge { background: #ff7675; color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+        .level-badge { color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; transition: background 0.3s; }
 
         .progress-bar { width: 100%; height: 6px; background: #f0f2f5; border-radius: 3px; margin-bottom: 2rem; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #4facfe, #00f2fe); width: 0%; transition: width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1); }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #4facfe, #00f2fe); width: 0%; transition: width 0.4s ease; }
 
-        .word-meaning { font-size: 1.8rem; font-weight: 700; color: #2d3436; margin: 15px 0 5px; letter-spacing: -0.5px; }
-        .word-phonetic { color: #b2bec3; font-size: 1.1rem; font-family: 'Arial', sans-serif; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: color 0.2s; }
-        .word-phonetic:hover { color: #6c5ce7; }
+        .word-meaning { font-size: 1.8rem; font-weight: 700; color: #2d3436; margin: 15px 0 5px; }
+        .word-phonetic { color: #b2bec3; font-size: 1.1rem; font-family: Arial, sans-serif; cursor: pointer; display: flex; justify-content: center; gap: 8px; }
+        .word-phonetic:hover { color: var(--primary-color); }
 
         .input-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 2.5rem 0; min-height: 60px; }
         .char-box {
             width: 48px; height: 58px; font-size: 1.8rem; text-align: center; border: 2px solid #e1e4e8;
-            border-radius: 12px; background: white; color: #2d3436;
-            transition: all 0.2s; caret-color: #6c5ce7; font-weight: 600;
+            border-radius: 12px; background: white; color: #2d3436; transition: all 0.2s; font-weight: 600;
         }
-        .char-box:focus { border-color: #6c5ce7; transform: translateY(-4px); box-shadow: 0 8px 20px rgba(108, 92, 231, 0.15); outline: none; }
+        .char-box:focus { border-color: var(--primary-color); transform: translateY(-4px); outline: none; }
         .char-box.static { background-color: #f8f9fa; border-color: transparent; color: #636e72; user-select: none; }
         .char-box.space { width: 20px; border: none; background: transparent; }
-        .char-box.correct { border-color: #2ecc71; background-color: #f0fff4; color: #2ecc71; }
-        .char-box.wrong { border-color: #ff7675; background-color: #fff5f5; color: #ff7675; animation: shake 0.4s; }
-        .char-box.hint-revealed { border-color: #ffeaa7; color: #e17055; background: #fffdf0; }
-
+        .char-box.correct { border-color: var(--success); background-color: #eafff2; color: var(--success); }
+        .char-box.wrong { border-color: var(--error); background-color: #fff5f5; color: var(--error); animation: shake 0.4s; }
+        .char-box.hint-revealed { border-color: var(--warn); color: #d35400; background: #fff8e1; }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 
-        /* 区域切换 */
+        /* 上传与弹窗 */
         .section { display: none; opacity: 0; transform: translateY(15px); transition: opacity 0.4s, transform 0.4s; }
         .section.active { display: block; opacity: 1; transform: translateY(0); }
-
-        /* 文件上传美化 */
-        .file-upload-wrapper {
-            margin: 25px 0; border: 2px dashed #d1d8e0; padding: 35px 20px; border-radius: 18px; background: #fdfdfd; 
-            cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
-        }
-        .file-upload-wrapper:hover { border-color: #6c5ce7; background: #f8f9fa; }
-        .file-upload-wrapper:active { background: #f1f2f6; }
         
-        .resume-banner {
-            background: #e0f7fa; color: #006064; padding: 12px 20px; border-radius: 12px; margin-bottom: 25px;
-            display: flex; justify-content: space-between; align-items: center; border: 1px solid #b2ebf2;
+        .file-upload-wrapper {
+            margin: 25px 0; border: 2px dashed #d1d8e0; padding: 25px; border-radius: 18px; background: #fdfdfd; cursor: pointer;
         }
+        .file-upload-wrapper:hover { border-color: var(--primary-color); background: #f8f9fa; }
 
-        /* 弹窗 */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000; justify-content: center; align-items: center;
         }
-        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-overlay.active { display: flex; }
         .modal-box {
             background: white; width: 85%; max-width: 480px; padding: 30px; border-radius: 24px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.2); text-align: left; max-height: 75vh; overflow-y: auto; transform: scale(0.9); transition: transform 0.3s;
+            text-align: left; max-height: 75vh; overflow-y: auto;
         }
-        .modal-overlay.active .modal-box { transform: scale(1); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #f1f2f6; padding-bottom: 15px; }
-        .modal-title { font-size: 1.25rem; font-weight: 800; color: #2d3436; }
-        .close-btn { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #b2bec3; padding: 0; line-height: 1; }
-        .close-btn:hover { color: #2d3436; }
-        
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #f1f2f6; padding-bottom: 10px; }
         .release-item { margin-bottom: 20px; }
-        .release-ver { display: inline-block; background: #6c5ce7; color: white; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; margin-right: 8px; vertical-align: middle; }
-        .release-date { font-size: 0.8rem; color: #b2bec3; vertical-align: middle; }
-        .release-content { margin-top: 8px; font-size: 0.95rem; color: #636e72; line-height: 1.6; padding-left: 20px; list-style-type: disc; }
-        .release-content li { margin-bottom: 4px; }
+        .release-ver { background: var(--primary-color); color: white; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; margin-right: 8px; }
 
         /* 结算页 */
         .score-circle {
-            width: 140px; height: 140px; border-radius: 50%; background: #fdcb6e; color: white;
+            width: 140px; height: 140px; border-radius: 50%; background: var(--warn); color: white;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            margin: 0 auto 2rem; box-shadow: 0 10px 30px rgba(253, 203, 110, 0.4); border: 6px solid white;
+            margin: 0 auto 2rem; border: 6px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        .score-val { font-size: 3.5rem; font-weight: 800; line-height: 1; }
-        .score-label { font-size: 0.85rem; opacity: 0.9; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-
         .wrong-list { text-align: left; background: #fff5f5; padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem; max-height: 250px; overflow-y: auto; border: 1px solid #ffccc7; }
-        .wrong-item { border-bottom: 1px dashed #ffccc7; padding: 10px 0; color: #c0392b; display: flex; justify-content: space-between; align-items: center; }
-        .wrong-item:last-child { border-bottom: none; }
-        .wrong-en { font-weight: bold; font-size: 1.05rem; }
-        .wrong-cn { color: #e17055; font-size: 0.9rem; }
-
-        .copyright { margin-top: 40px; font-size: 0.8rem; color: #b2bec3; }
+        .wrong-item { border-bottom: 1px dashed #ffccc7; padding: 8px 0; display: flex; justify-content: space-between; }
 
         @media (max-width: 480px) {
-            .container { width: 92%; padding: 2rem 1.5rem; border-radius: 20px; }
-            .char-box { width: 38px; height: 48px; font-size: 1.5rem; border-radius: 8px; }
-            .word-meaning { font-size: 1.4rem; }
-            .modal-box { width: 90%; padding: 20px; }
+            .container { width: 92%; padding: 2rem 1.5rem; }
+            .char-box { width: 38px; height: 48px; font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -180,85 +149,80 @@
     <!-- 1. 起始页 -->
     <div id="setupArea" class="section active">
         <h1>English Challenge</h1>
-        <p>基础词汇强化特训</p>
+        <p>选择难度，开始挑战</p>
         
-        <!-- 恢复存档提示 -->
-        <div id="resumeBanner" class="resume-banner" style="display:none;">
-            <div>
-                <div style="font-weight:bold; font-size:0.9rem;">发现未完成的进度</div>
-                <div id="resumeInfo" style="font-size:0.8rem; opacity:0.8;">Level 1 - 5/10 words</div>
+        <!-- 难度选择器 -->
+        <div class="diff-selector">
+            <div class="diff-btn active" onclick="setDifficulty('easy')" data-val="easy">
+                Easy<small>填空 30%</small>
             </div>
-            <button class="btn btn-small" style="background:#0097a7; box-shadow:none;" onclick="resumeGame()">继续</button>
+            <div class="diff-btn" onclick="setDifficulty('hard')" data-val="hard">
+                Hard<small>填空 70%</small>
+            </div>
+            <div class="diff-btn" onclick="setDifficulty('hell')" data-val="hell">
+                🔥 Hell<small>只给1字母</small>
+            </div>
         </div>
 
-        <button class="btn" style="width:80%; justify-content: center;" onclick="startWithDefault()">
-            🚀 开始闯关 (随机10词)
-        </button>
+        <!-- 恢复存档 -->
+        <div id="resumeBanner" style="display:none; background:#e0f7fa; padding:12px 20px; border-radius:12px; margin-bottom:20px; align-items:center; justify-content:space-between; color:#006064;">
+            <div><strong style="font-size:0.9rem;">未完成的挑战</strong><br><small id="resumeInfo" style="opacity:0.8">Level 1</small></div>
+            <button class="btn btn-small" style="background:#0097a7; margin:0;" onclick="resumeGame()">继续</button>
+        </div>
+
+        <button class="btn" style="width:80%; justify-content: center;" onclick="startWithDefault()">🚀 开始挑战 (随机10词)</button>
         
         <div class="file-upload-wrapper" onclick="document.getElementById('fileInput').click()">
-            <div style="font-size:2.2rem; margin-bottom:10px;">📂</div>
-            <div style="font-weight:600; color:#2d3436;">上传自定义题库 (.txt)</div>
-            <div style="font-size:0.85rem; color:#b2bec3; margin-top:5px;">支持大量单词，系统自动分批训练</div>
+            <div style="font-weight:600; color:#2d3436;">📂 上传自定义题库 (.txt)</div>
+            <div style="font-size:0.8rem; color:#b2bec3; margin-top:5px;">支持大量单词，自动随机抽取</div>
             <input type="file" id="fileInput" accept=".txt,.csv" onchange="handleFileUpload(this)" style="display:none;">
         </div>
 
         <div style="margin-top:25px;">
-            <button class="btn btn-outline btn-small" onclick="toggleModal('releaseModal')">📜 Release Notes V2.2</button>
+            <button class="btn btn-outline btn-small" onclick="toggleModal('releaseModal')">📜 Release Notes V2.3</button>
         </div>
-        
-        <div class="copyright">© 2026 English Challenge Online</div>
     </div>
 
     <!-- 2. 游戏主界面 -->
     <div id="gameArea" class="section">
         <div class="game-toolbar">
             <div id="levelBadge" class="level-badge">Level 1</div>
-            <button class="btn btn-icon" onclick="toggleSound()" title="音效开关" id="soundToggleBtn">🔊</button>
+            <button class="btn btn-icon" onclick="toggleSound()" id="soundToggleBtn">🔊</button>
         </div>
         
-        <div class="progress-bar">
-            <div id="progressFill" class="progress-fill"></div>
-        </div>
+        <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
 
         <div id="wordMeaning" class="word-meaning">Meaning</div>
         <div id="wordPhonetic" class="word-phonetic" onclick="speakCurrentWord()">
-            <span id="phoneticText">/IPA/</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            <span id="phoneticText">/IPA/</span> 🔊
         </div>
 
-        <div id="inputContainer" class="input-container">
-            <!-- 动态生成 -->
-        </div>
+        <div id="inputContainer" class="input-container"></div>
 
         <div style="display:flex; justify-content:center; gap:15px; margin-top:30px;">
-            <button class="btn btn-outline" onclick="useHint()" style="border-radius:12px; padding:10px 20px;">
-                💡 提示
-            </button>
-            <button id="submitBtn" class="btn" onclick="checkCurrentWord()" style="border-radius:12px; min-width:140px;">
-                提交 / Next
-            </button>
+            <button class="btn btn-outline" onclick="useHint()" style="border-radius:12px;">💡 提示</button>
+            <button id="submitBtn" class="btn" onclick="checkCurrentWord()" style="border-radius:12px; min-width:140px;">提交 / Next</button>
         </div>
     </div>
 
     <!-- 3. 结算页 -->
     <div id="resultArea" class="section">
         <div class="score-circle" id="scoreDisplay">
-            <div class="score-val">100</div>
-            <div class="score-label">Score</div>
+            <div class="score-val">100</div><div class="score-label">Score</div>
         </div>
         <div id="feedbackText" style="margin-bottom:2rem; font-size:1.1rem; line-height:1.6; color:#2d3436;"></div>
         
         <div id="wrongListContainer" class="wrong-list" style="display:none;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; padding-bottom:10px; border-bottom:1px solid #ffecec;">
-                <strong style="color:#d63031;">错题本 (Review List)</strong>
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #ffccc7; padding-bottom:5px;">
+                <strong style="color:#d63031;">错题本</strong>
                 <button class="btn btn-small btn-outline" style="border-color:#ff7675; color:#ff7675;" onclick="exportWrongWords()">📥 导出</button>
             </div>
             <div id="wrongListItems"></div>
         </div>
 
         <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:10px;">
-            <button id="nextLevelBtn" class="btn" onclick="startLevel2()">🔥 进入第二关 (Hard)</button>
-            <button id="restartBtn" class="btn" onclick="startNewSessionFromBank()" style="display:none;">🔄 换一组词继续练</button>
+            <button id="nextLevelBtn" class="btn" onclick="startLevel2()">🔥 进入强化训练</button>
+            <button id="restartBtn" class="btn" onclick="startNewSessionFromBank()" style="display:none;">🔄 换一组词</button>
             <button class="btn btn-outline" onclick="goToHome()">🏠 返回首页</button>
         </div>
     </div>
@@ -269,29 +233,24 @@
     <div class="modal-box">
         <div class="modal-header">
             <div class="modal-title">更新记录 (Release Notes)</div>
-            <button class="close-btn" onclick="toggleModal('releaseModal')">&times;</button>
+            <button style="background:none; border:none; font-size:1.5rem; cursor:pointer;" onclick="toggleModal('releaseModal')">&times;</button>
         </div>
         
         <div class="release-item">
-            <span class="release-ver">V2.2 Online</span><span class="release-date">2026-02-26</span>
-            <ul class="release-content">
-                <li>📚 <strong>词库大更新：</strong> 默认集成 100+ 基础高频词汇（涵盖 ability 到 collect）。</li>
-                <li>✨ <strong>线上优化：</strong> 增加移动端 PWA 支持，优化触屏体验。</li>
-                <li>📱 <strong>输入优化：</strong> 禁用手机键盘自动纠错，填空更顺畅。</li>
-                <li>🎨 <strong>UI 升级：</strong> 更柔和的配色与交互动画。</li>
-            </ul>
-        </div>
-
-        <div class="release-item">
-            <span class="release-ver">V2.1</span>
-            <ul class="release-content">
-                <li>🤖 <strong>智能分批：</strong> 无论词库多大，每次随机抽取 10 个词，减轻记忆负担。</li>
-                <li>🔄 <strong>无限模式：</strong> 结束后可“换一组”继续挑战。</li>
+            <span class="release-ver">V2.3</span> <strong>难度分级版</strong>
+            <ul style="color:#636e72; font-size:0.9rem; margin-top:5px; padding-left:20px;">
+                <li>🔥 <strong>新增地狱模式 (Hell Mode)：</strong> 只提供 1 个随机字母提示，记忆大师专属挑战！</li>
+                <li>🎚️ <strong>难度选择：</strong> 首页增加简单(30%)、困难(70%)、地狱(99%)三种难度。</li>
+                <li>📈 <strong>动态进阶：</strong> 简单模式的错题将在困难模式中复习；困难模式的错题将在地狱模式中复习。</li>
             </ul>
         </div>
         
-        <div style="text-align:center; margin-top:30px; font-size:0.8rem; color:#b2bec3;">
-            Designed for English Learners
+        <div class="release-item">
+            <span class="release-ver">V2.2</span> <strong>线上优化版</strong>
+            <ul style="color:#636e72; font-size:0.9rem; margin-top:5px; padding-left:20px;">
+                <li>📱 <strong>移动端优化：</strong> 适配 iOS/Android PWA，禁用键盘自动纠错。</li>
+                <li>📚 <strong>词库扩充：</strong> 内置 100+ 基础高频词汇。</li>
+            </ul>
         </div>
     </div>
 </div>
@@ -299,109 +258,24 @@
 <script>
     // --- 配置 ---
     const MAX_WORDS_PER_SESSION = 10;
-
-    // --- 数据 (Updated V2.2 Data) ---
+    
+    // --- 数据 (内置词库) ---
     const defaultData = [
-        { en: "ability", ph: "/əˈbɪləti/", cn: "能力；才能", type: "n." },
-        { en: "above", ph: "/əˈbʌv/", cn: "在……上面", type: "prep." },
-        { en: "abroad", ph: "/əˈbrɔːd/", cn: "到国外；在国外", type: "adv." },
-        { en: "absent", ph: "/ˈæbsənt/", cn: "缺席的；不在的", type: "adj." },
-        { en: "accept", ph: "/əkˈsept/", cn: "接受；认可", type: "v." },
-        { en: "accident", ph: "/ˈæksɪdənt/", cn: "事故；意外的事", type: "n." },
-        { en: "achieve", ph: "/əˈtʃiːv/", cn: "达到；取得", type: "v." },
-        { en: "active", ph: "/ˈæktɪv/", cn: "积极的；活跃的", type: "adj." },
-        { en: "advantage", ph: "/ədˈvɑːntɪdʒ/", cn: "优点；优势", type: "n." },
-        { en: "advice", ph: "/ədˈvaɪs/", cn: "劝告；建议", type: "n." },
-        { en: "afford", ph: "/əˈfɔːd/", cn: "买得起；负担得起", type: "v." },
-        { en: "against", ph: "/əˈɡenst/", cn: "反对；倚靠着", type: "prep." },
-        { en: "agree", ph: "/əˈɡriː/", cn: "同意；赞成", type: "v." },
-        { en: "alive", ph: "/əˈlaɪv/", cn: "活着的；存在的", type: "adj." },
-        { en: "allow", ph: "/əˈlaʊ/", cn: "允许；准许", type: "v." },
-        { en: "almost", ph: "/ˈɔːlməʊst/", cn: "几乎；差不多", type: "adv." },
-        { en: "alone", ph: "/əˈləʊn/", cn: "单独的；孤独的", type: "adj./adv." },
-        { en: "already", ph: "/ɔːlˈredi/", cn: "已经", type: "adv." },
-        { en: "always", ph: "/ˈɔːlweɪz/", cn: "总是；一直", type: "adv." },
-        { en: "amazing", ph: "/əˈmeɪzɪŋ/", cn: "令人惊异的", type: "adj." },
-        { en: "amount", ph: "/əˈmaʊnt/", cn: "数量；总数", type: "n." },
-        { en: "ancient", ph: "/ˈeɪnʃənt/", cn: "古代的；古老的", type: "adj." },
-        { en: "angry", ph: "/ˈæŋɡri/", cn: "生气的；愤怒的", type: "adj." },
-        { en: "animal", ph: "/ˈænɪml/", cn: "动物", type: "n." },
-        { en: "another", ph: "/əˈnʌðə/", cn: "另一个；又一个", type: "pron./adj." },
-        { en: "answer", ph: "/ˈɑːnsə/", cn: "回答；答案", type: "n./v." },
-        { en: "anyone", ph: "/ˈeniwʌn/", cn: "任何人", type: "pron." },
-        { en: "anything", ph: "/ˈeniθɪŋ/", cn: "任何事", type: "pron." },
-        { en: "anywhere", ph: "/ˈeniweə/", cn: "任何地方", type: "adv." },
-        { en: "appear", ph: "/əˈpɪə/", cn: "出现；显得", type: "v." },
-        { en: "apple", ph: "/ˈæpl/", cn: "苹果", type: "n." },
-        { en: "area", ph: "/ˈeəriə/", cn: "地区；面积", type: "n." },
-        { en: "argue", ph: "/ˈɑːɡjuː/", cn: "争论；辩论", type: "v." },
-        { en: "around", ph: "/əˈraʊnd/", cn: "在周围；大约", type: "adv./prep." },
-        { en: "arrive", ph: "/əˈraɪv/", cn: "到达", type: "v." },
-        { en: "article", ph: "/ˈɑːtɪkl/", cn: "文章；物品", type: "n." },
-        { en: "attention", ph: "/əˈtenʃn/", cn: "注意；关心", type: "n." },
-        { en: "available", ph: "/əˈveɪləbl/", cn: "可获得的；有空的", type: "adj." },
-        { en: "avoid", ph: "/əˈvɔɪd/", cn: "避免；躲开", type: "v." },
-        { en: "awake", ph: "/əˈweɪk/", cn: "醒着的", type: "adj." },
-        { en: "background", ph: "/ˈbækɡraʊnd/", cn: "背景", type: "n." },
-        { en: "balance", ph: "/ˈbæləns/", cn: "平衡", type: "n./v." },
-        { en: "beautiful", ph: "/ˈbjuːtɪfl/", cn: "美丽的", type: "adj." },
-        { en: "because", ph: "/bɪˈkɒz/", cn: "因为", type: "conj." },
-        { en: "become", ph: "/bɪˈkʌm/", cn: "变成；成为", type: "v." },
-        { en: "before", ph: "/bɪˈfɔː/", cn: "在……之前", type: "prep./conj." },
-        { en: "begin", ph: "/bɪˈɡɪn/", cn: "开始", type: "v." },
-        { en: "behavior", ph: "/bɪˈheɪvjə/", cn: "行为；举止", type: "n." },
-        { en: "behind", ph: "/bɪˈhaɪnd/", cn: "在……后面", type: "prep." },
-        { en: "believe", ph: "/bɪˈliːv/", cn: "相信；认为", type: "v." },
-        { en: "belong", ph: "/bɪˈlɒŋ/", cn: "属于", type: "v." },
-        { en: "below", ph: "/bɪˈləʊ/", cn: "在……下面", type: "prep." },
-        { en: "beside", ph: "/bɪˈsaɪd/", cn: "在……旁边", type: "prep." },
-        { en: "between", ph: "/bɪˈtwiːn/", cn: "在……之间", type: "prep." },
-        { en: "beyond", ph: "/bɪˈjɒnd/", cn: "超出；在……的那边", type: "prep." },
-        { en: "blind", ph: "/blaɪnd/", cn: "瞎的；盲目的", type: "adj." },
-        { en: "blood", ph: "/blʌd/", cn: "血液", type: "n." },
-        { en: "borrow", ph: "/ˈbɒrəʊ/", cn: "借入", type: "v." },
-        { en: "bottom", ph: "/ˈbɒtəm/", cn: "底部", type: "n." },
-        { en: "brave", ph: "/breɪv/", cn: "勇敢的", type: "adj." },
-        { en: "break", ph: "/breɪk/", cn: "打破；休息", type: "v./n." },
-        { en: "bridge", ph: "/brɪdʒ/", cn: "桥", type: "n." },
-        { en: "bright", ph: "/braɪt/", cn: "明亮的；聪明的", type: "adj." },
-        { en: "bring", ph: "/brɪŋ/", cn: "带来", type: "v." },
-        { en: "brother", ph: "/ˈbrʌðə/", cn: "兄弟", type: "n." },
-        { en: "build", ph: "/bɪld/", cn: "建筑；建造", type: "v." },
-        { en: "business", ph: "/ˈbɪznəs/", cn: "商业；生意", type: "n." },
-        { en: "camera", ph: "/ˈkæmərə/", cn: "照相机", type: "n." },
-        { en: "cancel", ph: "/ˈkænsl/", cn: "取消", type: "v." },
-        { en: "cancer", ph: "/ˈkænsə/", cn: "癌症", type: "n." },
-        { en: "capital", ph: "/ˈkæpɪtl/", cn: "首都；资本", type: "n." },
-        { en: "careful", ph: "/ˈkeəfl/", cn: "小心的；仔细的", type: "adj." },
-        { en: "carry", ph: "/ˈkæri/", cn: "携带；搬运", type: "v." },
-        { en: "catch", ph: "/kætʃ/", cn: "抓住；赶上", type: "v." },
-        { en: "cause", ph: "/kɔːz/", cn: "原因；引起", type: "n./v." },
-        { en: "celebrate", ph: "/ˈselɪbreɪt/", cn: "庆祝", type: "v." },
-        { en: "center", ph: "/ˈsentə/", cn: "中心", type: "n." },
-        { en: "century", ph: "/ˈsentʃəri/", cn: "世纪；百年", type: "n." },
-        { en: "certain", ph: "/ˈsɜːtn/", cn: "确定的；某一个", type: "adj." },
-        { en: "chance", ph: "/tʃɑːns/", cn: "机会；可能性", type: "n." },
-        { en: "change", ph: "/tʃeɪndʒ/", cn: "改变；零钱", type: "v./n." },
-        { en: "cheap", ph: "/tʃiːp/", cn: "便宜的", type: "adj." },
-        { en: "check", ph: "/tʃek/", cn: "检查；核对", type: "v./n." },
-        { en: "choice", ph: "/tʃɔɪs/", cn: "选择", type: "n." },
-        { en: "choose", ph: "/tʃuːz/", cn: "选择；决定", type: "v." },
-        { en: "circle", ph: "/ˈsɜːkl/", cn: "圆圈；圈出", type: "n./v." },
-        { en: "citizen", ph: "/ˈsɪtɪzn/", cn: "公民；市民", type: "n." },
-        { en: "city", ph: "/ˈsɪti/", cn: "城市", type: "n." },
-        { en: "classmate", ph: "/ˈklɑːsmeɪt/", cn: "同班同学", type: "n." },
-        { en: "clean", ph: "/kliːn/", cn: "干净的；打扫", type: "adj./v." },
-        { en: "clear", ph: "/klɪə/", cn: "清晰的；晴朗的", type: "adj." },
-        { en: "clever", ph: "/ˈklevə/", cn: "聪明的", type: "adj." },
-        { en: "climb", ph: "/klaɪm/", cn: "攀登；爬", type: "v." },
-        { en: "clock", ph: "/klɒk/", cn: "时钟", type: "n." },
-        { en: "clothes", ph: "/kləʊðz/", cn: "衣服", type: "n." },
-        { en: "cloud", ph: "/klaʊd/", cn: "云", type: "n." },
-        { en: "collect", ph: "/kəˈlekt/", cn: "收集；搜集", type: "v." },
-        { en: "color", ph: "/ˈkʌlə/", cn: "颜色", type: "n." },
-        { en: "comfortable", ph: "/ˈkʌmftəbl/", cn: "舒适的", type: "adj." },
-        { en: "common", ph: "/ˈkɒmən/", cn: "普通的；共同的", type: "adj." }
+        { en: "ability", ph: "/əˈbɪləti/", cn: "能力", type: "n." }, { en: "above", ph: "/əˈbʌv/", cn: "在…上面", type: "prep." },
+        { en: "accident", ph: "/ˈæksɪdənt/", cn: "事故", type: "n." }, { en: "achieve", ph: "/əˈtʃiːv/", cn: "达到", type: "v." },
+        { en: "active", ph: "/ˈæktɪv/", cn: "积极的", type: "adj." }, { en: "advantage", ph: "/ədˈvɑːntɪdʒ/", cn: "优点", type: "n." },
+        { en: "advice", ph: "/ədˈvaɪs/", cn: "建议", type: "n." }, { en: "against", ph: "/əˈɡenst/", cn: "反对", type: "prep." },
+        { en: "amazing", ph: "/əˈmeɪzɪŋ/", cn: "令人惊异的", type: "adj." }, { en: "ancient", ph: "/ˈeɪnʃənt/", cn: "古代的", type: "adj." },
+        { en: "animal", ph: "/ˈænɪml/", cn: "动物", type: "n." }, { en: "answer", ph: "/ˈɑːnsə/", cn: "回答", type: "n./v." },
+        { en: "appear", ph: "/əˈpɪə/", cn: "出现", type: "v." }, { en: "apple", ph: "/ˈæpl/", cn: "苹果", type: "n." },
+        { en: "area", ph: "/ˈeəriə/", cn: "地区", type: "n." }, { en: "arrive", ph: "/əˈraɪv/", cn: "到达", type: "v." },
+        { en: "attention", ph: "/əˈtenʃn/", cn: "注意", type: "n." }, { en: "available", ph: "/əˈveɪləbl/", cn: "可获得的", type: "adj." },
+        { en: "average", ph: "/ˈævərɪdʒ/", cn: "平均的", type: "adj." }, { en: "avoid", ph: "/əˈvɔɪd/", cn: "避免", type: "v." },
+        { en: "background", ph: "/ˈbækɡraʊnd/", cn: "背景", type: "n." }, { en: "balance", ph: "/ˈbæləns/", cn: "平衡", type: "n." },
+        { en: "beautiful", ph: "/ˈbjuːtɪfl/", cn: "美丽的", type: "adj." }, { en: "because", ph: "/bɪˈkɒz/", cn: "因为", type: "conj." },
+        { en: "become", ph: "/bɪˈkʌm/", cn: "成为", type: "v." }, { en: "before", ph: "/bɪˈfɔː/", cn: "之前", type: "prep." },
+        { en: "begin", ph: "/bɪˈɡɪn/", cn: "开始", type: "v." }, { en: "behavior", ph: "/bɪˈheɪvjə/", cn: "行为", type: "n." },
+        { en: "believe", ph: "/bɪˈliːv/", cn: "相信", type: "v." }, { en: "between", ph: "/bɪˈtwiːn/", cn: "在…之间", type: "prep." }
     ];
 
     // --- 音效系统 ---
@@ -417,83 +291,69 @@
         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
         gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + duration);
     }
-
     const SFX = {
         correct: () => { playTone(500, 'sine', 0.1); setTimeout(() => playTone(800, 'sine', 0.2), 100); },
         wrong: () => { playTone(150, 'sawtooth', 0.3); },
         click: () => { playTone(400, 'triangle', 0.05); },
         win: () => { [400, 500, 600, 800].forEach((f, i) => setTimeout(() => playTone(f, 'sine', 0.2), i*120)); }
     };
-
-    function toggleSound() {
-        soundEnabled = !soundEnabled;
-        document.getElementById('soundToggleBtn').textContent = soundEnabled ? '🔊' : '🔇';
-    }
-
+    function toggleSound() { soundEnabled = !soundEnabled; document.getElementById('soundToggleBtn').textContent = soundEnabled ? '🔊' : '🔇'; }
     function speakCurrentWord() {
         if (!soundEnabled) return;
-        const word = activeData[gameState.queue[gameState.currentIndex]].en;
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(word);
-        u.lang = 'en-US'; u.rate = 0.85;
-        window.speechSynthesis.speak(u);
+        const u = new SpeechSynthesisUtterance(activeData[gameState.queue[gameState.currentIndex]].en);
+        u.lang = 'en-US'; u.rate = 0.85; window.speechSynthesis.speak(u);
     }
 
+    // --- 状态管理 ---
     let fullWordBank = [];
     let activeData = [];
-    let gameState = { level: 1, queue: [], currentIndex: 0, wrongIndices: [], currentWordInputs: [], hintUsedThisWord: false };
+    let gameState = { 
+        level: 1, 
+        queue: [], 
+        currentIndex: 0, 
+        wrongIndices: [], 
+        currentWordInputs: [], 
+        difficulty: 'easy' // 'easy', 'hard', 'hell'
+    };
 
-    // --- 初始化与逻辑 ---
+    // --- 逻辑控制 ---
     window.onload = function() { checkSaveData(); };
 
-    function toggleModal(id) {
-        const el = document.getElementById(id);
-        if(el.classList.contains('active')) {
-            el.classList.remove('active');
-        } else {
-            el.classList.add('active');
-        }
+    function setDifficulty(diff) {
+        gameState.difficulty = diff;
+        document.querySelectorAll('.diff-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.val === diff);
+        });
     }
 
+    function toggleModal(id) { document.getElementById(id).classList.toggle('active'); }
+
     function checkSaveData() {
-        const saved = localStorage.getItem('wordGameSave');
+        const saved = localStorage.getItem('wordGameSave_v23');
         if (saved) {
             const parsed = JSON.parse(saved);
             if (parsed.activeData && parsed.gameState) {
                 document.getElementById('resumeBanner').style.display = 'flex';
-                document.getElementById('resumeInfo').textContent = 
-                    `Level ${parsed.gameState.level} - 进度: ${parsed.gameState.currentIndex}/${parsed.gameState.queue.length}`;
+                document.getElementById('resumeInfo').textContent = `进度: ${parsed.gameState.currentIndex}/${parsed.gameState.queue.length} (${parsed.gameState.difficulty})`;
             }
         }
     }
 
     function resumeGame() {
-        const saved = JSON.parse(localStorage.getItem('wordGameSave'));
-        activeData = saved.activeData;
-        fullWordBank = saved.fullWordBank || activeData;
-        gameState = saved.gameState;
+        const saved = JSON.parse(localStorage.getItem('wordGameSave_v23'));
+        activeData = saved.activeData; fullWordBank = saved.fullWordBank || activeData; gameState = saved.gameState;
         startGameCycle(false);
     }
 
-    function saveProgress() {
-        localStorage.setItem('wordGameSave', JSON.stringify({ activeData, gameState, fullWordBank }));
-    }
-
-    function clearSave() { localStorage.removeItem('wordGameSave'); }
-
-    function showSection(id) {
-        document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
-
-    function goToHome() {
-        showSection('setupArea');
-        checkSaveData();
+    function saveProgress() { localStorage.setItem('wordGameSave_v23', JSON.stringify({ activeData, gameState, fullWordBank })); }
+    function clearSave() { localStorage.removeItem('wordGameSave_v23'); }
+    function showSection(id) { document.querySelectorAll('.section').forEach(el => el.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+    
+    function goToHome() { 
+        showSection('setupArea'); checkSaveData(); 
         if(window.confettiInterval) clearInterval(window.confettiInterval);
         document.getElementById('confetti-canvas').getContext('2d').clearRect(0,0,window.innerWidth,window.innerHeight);
     }
@@ -504,91 +364,104 @@
     }
 
     function handleFileUpload(input) {
-        const file = input.files[0];
-        if (!file) return;
+        const file = input.files[0]; if (!file) return;
         const reader = new FileReader();
         reader.onload = function(e) {
             const parsed = parseTXT(e.target.result);
             if (parsed.length > 0) {
                 fullWordBank = parsed;
-                alert(`成功导入 ${parsed.length} 个单词！\n系统将随机抽取 ${Math.min(parsed.length, MAX_WORDS_PER_SESSION)} 个开始训练。`);
+                alert(`导入 ${parsed.length} 个单词。模式：${gameState.difficulty.toUpperCase()}`);
                 prepareGameSession();
-            } else {
-                alert("文件格式有误。");
-            }
+            } else alert("文件格式错误");
         };
         reader.readAsText(file, 'UTF-8');
     }
 
     function prepareGameSession() {
-        if (fullWordBank.length <= MAX_WORDS_PER_SESSION) {
-            activeData = [...fullWordBank];
-        } else {
-            let shuffled = [...fullWordBank].sort(() => 0.5 - Math.random());
-            activeData = shuffled.slice(0, MAX_WORDS_PER_SESSION);
-        }
+        if (fullWordBank.length <= MAX_WORDS_PER_SESSION) activeData = [...fullWordBank];
+        else activeData = [...fullWordBank].sort(() => 0.5 - Math.random()).slice(0, MAX_WORDS_PER_SESSION);
         initGame();
     }
-
     function startNewSessionFromBank() { prepareGameSession(); }
 
-    function parseTXT(content) {
-        const lines = content.split(/\r?\n/);
-        const result = [];
-        lines.forEach((line, index) => {
-            const tLine = line.trim();
-            if (!tLine || (index === 0 && (tLine.includes('英文') || tLine.includes('单词') || tLine.includes('ability')))) {
-                // 如果第一行是ability也可能是数据，这里简单的防止header逻辑优化
-                if(index===0 && (tLine.includes('英文') || tLine.includes('词性'))) return;
-            }
-            const parts = tLine.split(/,|，/);
-            if (parts.length >= 2) {
-                result.push({
-                    en: parts[0].trim(),
-                    ph: parts[1] ? parts[1].trim() : '',
-                    cn: parts[2] ? parts[2].trim() : parts[1].trim(),
-                    type: parts[3] ? parts[3].trim() : ''
-                });
-            }
-        });
-        return result;
+    function parseTXT(c) {
+        return c.split(/\r?\n/).map((l,i) => {
+            if(!l.trim() || (i===0 && (l.includes('英文') || l.includes('ability')))) return null;
+            const p = l.split(/,|，/);
+            return p.length>=2 ? {en:p[0].trim(), ph:p[1]?p[1].trim():'', cn:p[2]?p[2].trim():p[1].trim(), type:p[3]?p[3].trim():''} : null;
+        }).filter(Boolean);
     }
 
     function initGame() {
-        gameState.level = 1;
-        gameState.wrongIndices = [];
-        gameState.queue = activeData.map((_, i) => i);
-        gameState.currentIndex = 0;
-        clearSave();
-        startGameCycle(true);
+        gameState.level = 1; gameState.wrongIndices = []; 
+        gameState.queue = activeData.map((_, i) => i); gameState.currentIndex = 0;
+        clearSave(); startGameCycle(true);
     }
 
     function startGameCycle(reset = false) {
         showSection('gameArea');
-        document.getElementById('levelBadge').textContent = gameState.level === 1 ? "Level 1" : "Level 2";
-        document.getElementById('levelBadge').style.background = gameState.level === 1 ? "#ff7675" : "#a29bfe";
+        const badge = document.getElementById('levelBadge');
+        const diff = gameState.difficulty;
+        
+        let label = `Level ${gameState.level} - `;
+        let color = '#00b894';
+
+        // 难度与关卡逻辑展示
+        if (gameState.level === 1) {
+            label += diff.toUpperCase();
+            if(diff==='easy') color='#00b894';
+            else if(diff==='hard') color='#e17055';
+            else color='#6c5ce7';
+        } else {
+            label += "REVIEW";
+            color = '#d63031'; // 复习关总是红色的
+        }
+        
+        badge.textContent = label;
+        badge.style.background = color;
+        
         if (reset) gameState.currentIndex = 0;
         renderWord();
     }
 
     function renderWord() {
         saveProgress();
-        gameState.hintUsedThisWord = false;
-        const container = document.getElementById('inputContainer');
-        container.innerHTML = '';
+        const container = document.getElementById('inputContainer'); container.innerHTML = '';
         gameState.currentWordInputs = [];
 
-        const wordIdx = gameState.queue[gameState.currentIndex];
-        const data = activeData[wordIdx];
+        const data = activeData[gameState.queue[gameState.currentIndex]];
         const wordStr = data.en;
 
-        document.getElementById('wordMeaning').textContent = `${data.cn} ${data.type ? '('+data.type+')' : ''}`;
+        document.getElementById('wordMeaning').textContent = `${data.cn} ${data.type?'('+data.type+')':''}`;
         document.getElementById('phoneticText').textContent = data.ph || "";
 
         const lettersOnly = wordStr.replace(/[^a-zA-Z]/g, '');
-        const hideRatio = gameState.level === 1 ? 0.3 : 0.7;
+        
+        // --- 核心难度逻辑 ---
+        let hideRatio = 0.3; 
+        let isHell = false;
+
+        if (gameState.level === 1) {
+            if (gameState.difficulty === 'easy') hideRatio = 0.3;
+            if (gameState.difficulty === 'hard') hideRatio = 0.7;
+            if (gameState.difficulty === 'hell') isHell = true;
+        } else {
+            // Level 2 (复习关) 难度自动升级
+            // Easy -> Hard(0.7), Hard/Hell -> Hell
+            if (gameState.difficulty === 'easy') hideRatio = 0.7;
+            else isHell = true;
+        }
+
         let hideCount = Math.ceil(lettersOnly.length * hideRatio);
-        if (hideCount < 1 && lettersOnly.length > 0) hideCount = 1;
+        
+        // Hell 模式：只保留1个字母 (即隐藏 length - 1)
+        if (isHell) {
+            hideCount = lettersOnly.length - 1;
+            if(hideCount < 0) hideCount = 0; // 防止单字母单词出错
+        } else {
+            // 常规模式至少挖1个空
+            if (hideCount < 1 && lettersOnly.length > 0) hideCount = 1;
+        }
 
         let indices = [];
         for (let i=0; i<wordStr.length; i++) if (/[a-zA-Z]/.test(wordStr[i])) indices.push(i);
@@ -603,20 +476,10 @@
             } else if (hiddenSet.has(i)) {
                 const inp = document.createElement('input');
                 inp.className = 'char-box'; inp.maxLength = 1; inp.dataset.correct = char;
-                // 禁止手机自动纠错
-                inp.setAttribute('autocomplete', 'off');
-                inp.setAttribute('autocorrect', 'off');
-                inp.setAttribute('autocapitalize', 'off');
-                inp.setAttribute('spellcheck', 'false');
-                
+                inp.setAttribute('autocomplete', 'off'); inp.setAttribute('autocorrect', 'off'); inp.setAttribute('spellcheck', 'false');
                 inp.oninput = function() { SFX.click(); if(this.value) focusNext(this); };
-                inp.onkeydown = function(e) { 
-                    if(e.key === 'Backspace' && !this.value) focusPrev(this); 
-                    if(e.key === 'Enter') checkCurrentWord();
-                };
-                inp.onfocus = function() { 
-                    setTimeout(() => this.scrollIntoView({behavior:'smooth', block:'center'}), 300); 
-                }
+                inp.onkeydown = function(e) { if(e.key === 'Backspace' && !this.value) focusPrev(this); if(e.key === 'Enter') checkCurrentWord(); };
+                inp.onfocus = function() { setTimeout(() => this.scrollIntoView({behavior:'smooth', block:'center'}), 300); }
                 container.appendChild(inp);
                 gameState.currentWordInputs.push({correct: char, isInput: true, el: inp});
             } else {
@@ -636,9 +499,7 @@
     function useHint() {
         const inputs = gameState.currentWordInputs.filter(i => i.isInput && !i.el.disabled);
         let target = inputs.find(i => i.el.value === '') || inputs.find(i => i.el.value.toLowerCase() !== i.correct.toLowerCase());
-        if (target) {
-            target.el.value = target.correct; target.el.classList.add('hint-revealed'); gameState.hintUsedThisWord = true; SFX.click(); focusNext(target.el);
-        }
+        if (target) { target.el.value = target.correct; target.el.classList.add('hint-revealed'); SFX.click(); focusNext(target.el); }
     }
 
     function checkCurrentWord() {
@@ -647,59 +508,50 @@
             if (item.isInput) {
                 if (item.el.value.trim().toLowerCase() !== item.correct.toLowerCase()) {
                     allCorrect = false; item.el.classList.add('wrong'); item.el.classList.remove('correct');
-                } else {
-                    item.el.classList.add('correct'); item.el.classList.remove('wrong');
-                }
+                } else { item.el.classList.add('correct'); item.el.classList.remove('wrong'); }
             }
         });
         const currentIdx = gameState.queue[gameState.currentIndex];
         if (allCorrect) {
             SFX.correct(); speakCurrentWord();
-            if (gameState.hintUsedThisWord && gameState.level === 1) if (!gameState.wrongIndices.includes(currentIdx)) gameState.wrongIndices.push(currentIdx);
             setTimeout(() => {
                 gameState.currentIndex++;
                 if (gameState.currentIndex < gameState.queue.length) renderWord(); else finishLevel();
             }, 1200);
         } else {
             SFX.wrong();
-            if (gameState.level === 1) if (!gameState.wrongIndices.includes(currentIdx)) gameState.wrongIndices.push(currentIdx);
+            if (gameState.level === 1 && !gameState.wrongIndices.includes(currentIdx)) gameState.wrongIndices.push(currentIdx);
         }
     }
 
     function finishLevel() {
-        clearSave();
-        showSection('resultArea');
-        const total = gameState.queue.length;
-        const wrongCount = gameState.wrongIndices.length;
+        clearSave(); showSection('resultArea');
+        const total = gameState.queue.length; const wrongCount = gameState.wrongIndices.length;
         const score = Math.round(((total - wrongCount) / total) * 100);
         
-        const scoreDisplay = document.getElementById('scoreDisplay');
+        document.querySelector('.score-val').textContent = score;
         const fb = document.getElementById('feedbackText');
         const nextBtn = document.getElementById('nextLevelBtn');
         const restartBtn = document.getElementById('restartBtn');
         const wrongArea = document.getElementById('wrongListContainer');
-        
-        document.querySelector('.score-val').textContent = score;
+        const scoreCircle = document.getElementById('scoreDisplay');
 
         if (score === 100) {
-            SFX.win(); startConfetti();
-            scoreDisplay.style.background = "#2ecc71"; 
-            scoreDisplay.style.borderColor = "#2ecc71";
-            fb.innerHTML = "🎉 <strong style='font-size:1.4rem'>Perfect!</strong><br>全部正确！你的词汇量非常扎实！";
+            SFX.win(); startConfetti(); scoreCircle.style.background = "#00b894"; scoreCircle.style.borderColor = "#00b894";
+            fb.innerHTML = "🎉 <strong>Perfect!</strong><br>全部正确！你是单词大师！";
             wrongArea.style.display = 'none'; nextBtn.style.display = 'none'; restartBtn.style.display = 'inline-block';
         } else {
-            scoreDisplay.style.background = "#fdcb6e"; 
-            scoreDisplay.style.borderColor = "#fdcb6e";
+            scoreCircle.style.background = "#fdcb6e"; scoreCircle.style.borderColor = "#fdcb6e";
             wrongArea.style.display = 'block';
-            let html = gameState.wrongIndices.map(i => {
-                const w = activeData[i]; return `<div class="wrong-item"><span class="wrong-en">${w.en}</span><span class="wrong-cn">${w.cn}</span></div>`;
+            document.getElementById('wrongListItems').innerHTML = gameState.wrongIndices.map(i => {
+                const w = activeData[i]; return `<div class="wrong-item"><span style="font-weight:bold">${w.en}</span><span style="color:#e17055">${w.cn}</span></div>`;
             }).join('');
-            document.getElementById('wrongListItems').innerHTML = html;
+            
             if (gameState.level === 1) {
-                fb.innerHTML = `本次得分 <strong>${score}</strong> 分。<br>错题已加入下方列表，准备好挑战第二关了吗？`;
+                fb.innerHTML = `得分 <strong>${score}</strong>。<br>错题已准备好，进入高难度复习？`;
                 nextBtn.style.display = 'inline-block'; restartBtn.style.display = 'none';
             } else {
-                fb.innerHTML = `Level 2 完成！<br>经过高强度拼写训练，这些单词你已经掌握了！`;
+                fb.innerHTML = `复习完成！<br>经过地狱般的磨练，你变强了！`;
                 nextBtn.style.display = 'none'; restartBtn.style.display = 'inline-block';
             }
         }
@@ -707,35 +559,27 @@
 
     function startLevel2() {
         gameState.level = 2; gameState.queue = [...gameState.wrongIndices]; gameState.currentIndex = 0;
-        if(gameState.queue.length === 0) { alert("没有错题！"); return; }
+        if(gameState.queue.length === 0) { alert("无错题！"); return; }
         startGameCycle(true);
     }
-
+    
     function exportWrongWords() {
         if (gameState.wrongIndices.length === 0) return;
-        let content = "英文单词,音标,中文释义,词性\n";
-        gameState.wrongIndices.forEach(idx => { const w = activeData[idx]; content += `${w.en},${w.ph},${w.cn},${w.type}\n`; });
-        const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `review_words_${new Date().toISOString().slice(0,10)}.txt`; a.click();
+        let c = "英文,音标,中文,词性\n";
+        gameState.wrongIndices.forEach(i => { const w = activeData[i]; c += `${w.en},${w.ph},${w.cn},${w.type}\n`; });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([c], {type:"text/plain"})); a.download = `review_${new Date().toISOString().slice(0,10)}.txt`; a.click();
     }
 
     function startConfetti() {
-        const canvas = document.getElementById('confetti-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        const pieces = Array.from({length:120}, () => ({
-            x: Math.random()*canvas.width, y: Math.random()*canvas.height-canvas.height,
-            w: Math.random()*10+5, h: Math.random()*10+5, c: ['#f1c40f','#e74c3c','#3498db','#2ecc71'].at(Math.floor(Math.random()*4)), v: Math.random()*3+2
-        }));
+        const c = document.getElementById('confetti-canvas'); const ctx = c.getContext('2d');
+        c.width = window.innerWidth; c.height = window.innerHeight;
+        const p = Array.from({length:100}, () => ({x:Math.random()*c.width, y:Math.random()*c.height-c.height, w:Math.random()*10+5, h:Math.random()*10+5, c:['#f1c40f','#e74c3c','#3498db','#2ecc71'][Math.floor(Math.random()*4)], v:Math.random()*3+2}));
         window.confettiInterval = setInterval(() => {
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            pieces.forEach(p => {
-                p.y += p.v; p.x += Math.sin(p.y*0.01); ctx.fillStyle = p.c; ctx.fillRect(p.x, p.y, p.w, p.h);
-                if(p.y > canvas.height) p.y = -20;
-            });
+            ctx.clearRect(0,0,c.width,c.height);
+            p.forEach(k => { k.y+=k.v; k.x+=Math.sin(k.y*0.01); ctx.fillStyle=k.c; ctx.fillRect(k.x,k.y,k.w,k.h); if(k.y>c.height) k.y=-20; });
         }, 16);
     }
-    window.onresize = () => { document.getElementById('confetti-canvas').width = window.innerWidth; };
+    window.onresize = () => document.getElementById('confetti-canvas').width = window.innerWidth;
 </script>
 </body>
 </html>

@@ -3,25 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
-    <title>英语单词大闯关 V2.4 | 六年级专项训练</title>
-    <meta name="description" content="沪教版六年级英语单词专项训练，支持错题自动记录与强化复习。">
-    
-    <!-- Mobile App Config -->
+    <title>英语单词大闯关 V2.6</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#e0c3fc">
-    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=E6&background=6c5ce7&color=fff&rounded=true">
+    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=En&background=6c5ce7&color=fff&rounded=true">
 
     <style>
         :root {
             --primary: #6c5ce7; --secondary: #a29bfe;
             --bg-grad: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --card-bg: rgba(255, 255, 255, 0.96);
+            --card-bg: rgba(255, 255, 255, 0.98);
             --text: #2d3436; --success: #00b894; --error: #d63031; --warn: #fdcb6e;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg-grad); margin: 0; min-height: 100vh;
             display: flex; justify-content: center; align-items: center;
             color: var(--text); overflow-x: hidden; -webkit-tap-highlight-color: transparent;
@@ -29,84 +25,81 @@
 
         .container {
             width: 90%; max-width: 600px; background: var(--card-bg); border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.08); padding: 2rem; text-align: center;
-            position: relative; backdrop-filter: blur(12px);
-            transition: all 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1); padding: 2rem 1.5rem; text-align: center;
+            position: relative; backdrop-filter: blur(12px); transition: all 0.3s ease;
         }
 
         h1 { color: var(--primary); margin-bottom: 0.5rem; font-size: 1.8rem; }
         p { color: #636e72; margin-bottom: 1.5rem; font-size: 0.9rem; }
 
         /* 难度选择器 */
-        .diff-selector {
-            display: flex; gap: 8px; margin-bottom: 20px; background: #f1f2f6;
-            padding: 4px; border-radius: 12px;
-        }
-        .diff-btn {
-            flex: 1; padding: 8px 0; cursor: pointer; border-radius: 10px; font-size: 0.85rem;
-            color: #b2bec3; transition: all 0.2s; font-weight: 600;
-        }
+        .diff-selector { display: flex; gap: 8px; margin-bottom: 20px; background: #f1f2f6; padding: 4px; border-radius: 12px; }
+        .diff-btn { flex: 1; padding: 10px 0; cursor: pointer; border-radius: 10px; font-size: 0.85rem; color: #b2bec3; font-weight: 600; transition: 0.2s; }
         .diff-btn.active[data-val="easy"] { background: white; color: var(--success); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .diff-btn.active[data-val="hard"] { background: white; color: #e17055; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .diff-btn.active[data-val="hell"] { background: white; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 
-        /* 主菜单按钮网格 */
-        .menu-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;
-        }
+        /* 主菜单 */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .menu-btn {
             background: white; border: 2px solid #e1e4e8; border-radius: 16px; padding: 15px;
-            cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-height: 100px;
+            cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100px;
         }
-        .menu-btn:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(108,92,231,0.1); }
         .menu-btn:active { transform: scale(0.98); }
         .menu-icon { font-size: 2rem; margin-bottom: 8px; }
-        .menu-title { font-weight: 700; color: var(--text); font-size: 1rem; }
-        .menu-sub { font-size: 0.75rem; color: #b2bec3; margin-top: 4px; }
+        .menu-title { font-weight: 700; font-size: 0.95rem; }
+        .menu-sub { font-size: 0.75rem; opacity: 0.8; margin-top: 4px; }
         
-        /* 全宽按钮 */
-        .btn-full { grid-column: span 2; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white; }
-        .btn-full:hover { border-color: transparent; box-shadow: 0 8px 20px rgba(108,92,231,0.3); }
-        .btn-full .menu-title { color: white; }
-        .btn-full .menu-sub { color: rgba(255,255,255,0.8); }
+        /* 错题本样式 */
+        .btn-review { background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white; }
+        .btn-review .menu-title { color: white; }
+        .btn-review .menu-sub { color: rgba(255,255,255,0.9); }
 
-        /* 游戏区域 */
-        .section { display: none; opacity: 0; transform: translateY(10px); transition: all 0.3s; }
-        .section.active { display: block; opacity: 1; transform: translateY(0); }
+        /* 游戏区 */
+        .section { display: none; animation: fadeIn 0.3s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .word-meaning { font-size: 1.6rem; font-weight: 800; margin: 15px 0; color: #2d3436; }
-        .word-phonetic { color: #888; font-family: Arial, sans-serif; margin-bottom: 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+        .word-meaning { font-size: 1.5rem; font-weight: 800; margin: 15px 0; color: #2d3436; line-height: 1.3; }
+        .word-phonetic { color: #888; margin-bottom: 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
         
-        .input-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 30px 0; min-height: 60px; }
+        /* 输入框容器 (保持 iOS 优化) */
+        .input-container {
+            display: flex; flex-wrap: nowrap; justify-content: center; gap: 6px; margin: 20px 0; padding: 10px 2px;
+            overflow-x: auto; min-height: 60px; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+        }
+        .input-container::-webkit-scrollbar { display: none; }
+        .input-container.overflowing { justify-content: flex-start; }
+
         .char-box {
-            width: 42px; height: 52px; font-size: 1.6rem; text-align: center; border: 2px solid #e1e4e8;
-            border-radius: 10px; background: white; font-weight: 600; color: var(--text);
+            width: 42px; height: 52px; font-size: 1.6rem; text-align: center;
+            border: 2px solid #e1e4e8; border-radius: 10px; background: white;
+            font-weight: 600; color: var(--text); flex-shrink: 0;
             transition: border 0.2s, transform 0.2s;
         }
-        .char-box:focus { border-color: var(--primary); outline: none; transform: translateY(-3px); }
+        
+        /* 紧凑模式 */
+        .char-box.compact { width: 34px; height: 44px; font-size: 1.3rem; border-radius: 8px; }
+        .char-box.super-compact { width: 28px; height: 38px; font-size: 1.1rem; border-radius: 6px; gap: 3px; }
+
+        .char-box:focus { border-color: var(--primary); outline: none; transform: translateY(-3px); z-index: 2; }
         .char-box.correct { border-color: var(--success); background: #eafff2; color: var(--success); }
         .char-box.wrong { border-color: var(--error); background: #fff0f0; animation: shake 0.4s; }
         .char-box.static { background: #f8f9fa; border: none; color: #636e72; }
-        .char-box.space { width: 15px; border: none; background: transparent; }
+        .char-box.space { width: 10px; border: none; background: transparent; }
 
         @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
 
-        /* 底部工具栏 */
         .toolbar { display: flex; justify-content: space-between; margin-top: 20px; }
-        .btn { padding: 10px 24px; border-radius: 25px; border: none; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .btn { padding: 12px 24px; border-radius: 25px; border: none; cursor: pointer; font-weight: 600; font-size: 1rem; }
         .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(108,92,231,0.3); }
         .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
 
         /* 模态框 */
-        .modal {
-            position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5);
-            display: none; align-items: center; justify-content: center; z-index: 999; backdrop-filter: blur(4px);
-        }
+        .modal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 999; }
         .modal.open { display: flex; }
         .modal-box { background: white; width: 85%; max-width: 400px; padding: 25px; border-radius: 20px; text-align: left; max-height: 80vh; overflow-y: auto; }
         .release-tag { background: var(--primary); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; margin-right: 5px; }
-
         .score-circle { width: 120px; height: 120px; border-radius: 50%; background: var(--warn); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 auto 20px; font-size: 2.5rem; font-weight: 800; border: 5px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
     </style>
 </head>
@@ -114,12 +107,11 @@
 
 <div class="container">
     
-    <!-- 1. 首页 (Home) -->
+    <!-- 1. 首页 -->
     <div id="homeArea" class="section active">
-        <h1>Word Master 6</h1>
-        <p>六年级英语单词专项突破</p>
+        <h1>Word Master V2.6</h1>
+        <p>小学英语单词专项突破</p>
 
-        <!-- 难度选择 -->
         <div class="diff-selector">
             <div class="diff-btn active" onclick="setDiff('easy')" data-val="easy">Easy (30%)</div>
             <div class="diff-btn" onclick="setDiff('hard')" data-val="hard">Hard (70%)</div>
@@ -127,41 +119,38 @@
         </div>
 
         <div class="menu-grid">
-            <!-- 六年级上 -->
-            <div class="menu-btn" onclick="startSession('vol1')">
+            <div class="menu-btn" onclick="startSession('vol5')">
+                <div class="menu-icon">📗</div>
+                <div class="menu-title">五年级全册</div>
+                <div class="menu-sub">570 词汇</div>
+            </div>
+            <div class="menu-btn btn-review" onclick="startReviewSession()">
+                <div class="menu-icon">📕</div>
+                <div class="menu-title">错题集训</div>
+                <div class="menu-sub" id="wrongCountLabel">加载中...</div>
+            </div>
+            <div class="menu-btn" onclick="startSession('vol6_1')">
                 <div class="menu-icon">📘</div>
                 <div class="menu-title">六年级上册</div>
                 <div class="menu-sub">287 词汇</div>
             </div>
-            <!-- 六年级下 -->
-            <div class="menu-btn" onclick="startSession('vol2')">
+            <div class="menu-btn" onclick="startSession('vol6_2')">
                 <div class="menu-icon">📙</div>
                 <div class="menu-title">六年级下册</div>
                 <div class="menu-sub">274 词汇</div>
             </div>
-            <!-- 错题本 -->
-            <div class="menu-btn btn-full" onclick="startReviewSession()">
-                <div class="menu-icon">📕</div>
-                <div class="menu-title">错题集训 (Review)</div>
-                <div class="menu-sub" id="wrongCountLabel">暂无错题</div>
-            </div>
-            <!-- 上传 -->
-            <div class="menu-btn" onclick="document.getElementById('fileInput').click()" style="grid-column: span 2; border-style: dashed; background: #f9f9f9;">
-                <div class="menu-title" style="color:#636e72">📂 上传其他题库</div>
-                <input type="file" id="fileInput" accept=".txt,.csv" onchange="handleFile(this)" style="display:none;">
-            </div>
         </div>
 
         <div style="margin-top:20px;">
-            <button class="btn" style="background:none; color:#b2bec3; font-size:0.8rem;" onclick="toggleModal(true)">📜 版本更新说明 (V2.4)</button>
+            <button class="btn" style="background:none; color:#b2bec3; font-size:0.8rem;" onclick="toggleModal(true)">📜 Release Note (V2.6)</button>
         </div>
     </div>
 
-    <!-- 2. 游戏页 (Game) -->
+    <!-- 2. 游戏页 -->
     <div id="gameArea" class="section">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <span id="gameBadge" style="background:#00b894; color:white; padding:4px 12px; border-radius:15px; font-size:0.8rem; font-weight:bold;">Level 1</span>
-            <button onclick="toggleSound()" id="sndBtn" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">🔊</button>
+            <span id="gameBadge" style="background:#00b894; color:white; padding:4px 12px; border-radius:15px; font-size:0.8rem; font-weight:bold;">1 / 10</span>
+            <button onclick="toggleSound()" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">🔊</button>
         </div>
         <div style="width:100%; height:6px; background:#eee; border-radius:3px; overflow:hidden;">
             <div id="progressBar" style="width:0%; height:100%; background:linear-gradient(90deg, #6c5ce7, #a29bfe); transition:0.3s;"></div>
@@ -172,6 +161,7 @@
             <span id="wordPhonetic">/ipa/</span> 🔊
         </div>
 
+        <!-- 输入框容器 -->
         <div id="inputBox" class="input-container"></div>
 
         <div class="toolbar">
@@ -181,14 +171,12 @@
         <button onclick="goHome()" style="margin-top:15px; background:none; border:none; color:#b2bec3; cursor:pointer;">退出训练</button>
     </div>
 
-    <!-- 3. 结算页 (Result) -->
+    <!-- 3. 结算页 -->
     <div id="resultArea" class="section">
         <div class="score-circle" id="scoreVal">100</div>
         <h2 id="resultTitle" style="color:var(--primary);">完成!</h2>
         <p id="resultMsg">本次训练结束</p>
-        
         <div id="wrongList" style="text-align:left; background:#fff5f5; padding:15px; border-radius:10px; margin:20px 0; max-height:200px; overflow-y:auto; display:none;"></div>
-
         <div style="display:flex; justify-content:center; gap:10px;">
             <button class="btn btn-primary" onclick="restartSession()">再练一组</button>
             <button class="btn btn-outline" onclick="goHome()">返回首页</button>
@@ -197,36 +185,606 @@
 
 </div>
 
-<!-- Release Note -->
 <div id="noteModal" class="modal" onclick="if(event.target===this) toggleModal(false)">
     <div class="modal-box">
-        <h3>🚀 V2.4 更新日志</h3>
+        <h3>🚀 V2.6 更新日志</h3>
         <div style="margin-bottom:15px;">
-            <p><span class="release-tag">NEW</span> <strong>内置教材词库</strong><br>集成沪教版六年级上册(287词)与下册(274词)。</p>
+            <p><span class="release-tag">NEW</span> <strong>新增五年级词库</strong><br>集成五年级全册 570 个核心词汇，涵盖基础数字、月份、职业及生活常用词。</p>
         </div>
         <div style="margin-bottom:15px;">
-            <p><span class="release-tag">NEW</span> <strong>全局错题本</strong><br>自动记录所有做错的单词，支持随时进行“错题集训”。</p>
+            <p><span class="release-tag">UI</span> <strong>首页布局升级</strong><br>采用四宫格设计，将五年级、六上、六下与错题本并列展示，查阅更直观。</p>
         </div>
         <div style="margin-bottom:15px;">
-            <p><span class="release-tag">UX</span> <strong>输入体验优化</strong><br>优化键盘呼出逻辑，自动尝试切换英文键盘，禁用自动纠错。</p>
+            <p><span class="release-tag">FIX</span> <strong>体验保持</strong><br>保留了 iOS 键盘优化与长单词排版逻辑，确保全学段词汇练习流畅。</p>
         </div>
-        <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="toggleModal(false)">我知道了</button>
+        <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="toggleModal(false)">确认</button>
     </div>
 </div>
 
 <script>
-    // --- 数据注入 (Data Injection) ---
-    // 为了减小体积，这里使用紧凑格式。实际部署时这部分数据会很大。
-    // 六年级上册 (Volume 1)
-    const rawVol1 = `1	life	/laɪf/	n. 生活；生命
-2	break	/breɪk/	n. 课间休息；间歇
-3	ICT	/ˌaɪ siː ˈtiː/	n. 信息通信技术
+    // --- 词库数据 ---
+    // 五年级全册 (570词)
+    const rawVol5 = `1	first	/fɜːst/	num. 第一
+2	second	/ˈsekənd/	num. 第二
+3	third	/θɜːd/	num. 第三
+4	fourth	/fɔːθ/	num. 第四
+5	fifth	/fɪfθ/	num. 第五
+6	sixth	/sɪksθ/	num. 第六
+7	seventh	/ˈsev(ə)nθ/	num. 第七
+8	eighth	/eɪtθ/	num. 第八
+9	ninth	/naɪnθ/	num. 第九
+10	tenth	/tenθ/	num. 第十
+11	eleventh	/ɪˈlev(ə)nθ/	num. 第十一
+12	twelfth	/twelfθ/	num. 第十二
+13	thirteenth	/ˌθɜːˈtiːnθ/	num. 第十三
+14	fourteenth	/ˌfɔːˈtiːnθ/	num. 第十四
+15	fifteenth	/ˌfɪfˈtiːnθ/	num. 第十五
+16	sixteenth	/ˌsɪksˈtiːnθ/	num. 第十六
+17	seventeenth	/ˌsev(ə)nˈtiːnθ/	num. 第十七
+18	eighteenth	/ˌeɪˈtiːnθ/	num. 第十八
+19	nineteenth	/ˌnaɪnˈtiːnθ/	num. 第十九
+20	twentieth	/ˈtwentiəθ/	num. 第二十
+21	twenty-first	/ˈtwenti fɜːst/	num. 第二十一
+22	twenty-second	/ˈtwenti ˈsekənd/	num. 第二十二
+23	twenty-third	/ˈtwenti θɜːd/	num. 第二十三
+24	twenty-fourth	/ˈtwenti fɔːθ/	num. 第二十四
+25	twenty-fifth	/ˈtwenti fɪfθ/	num. 第二十五
+26	twenty-sixth	/ˈtwenti sɪksθ/	num. 第二十六
+27	twenty-seventh	/ˈtwenti ˈsev(ə)nθ/	num. 第二十七
+28	twenty-eighth	/ˈtwenti eɪtθ/	num. 第二十八
+29	twenty-ninth	/ˈtwenti naɪnθ/	num. 第二十九
+30	thirtieth	/ˈθɜːtiəθ/	num. 第三十
+31	thirty-first	/ˈθɜːti fɜːst/	num. 第三十一
+32	January	/ˈdʒænjuəri/	n. 一月
+33	February	/ˈfebruəri/	n. 二月
+34	March	/mɑːtʃ/	n. 三月
+35	April	/ˈeɪprəl/	n. 四月
+36	May	/meɪ/	n. 五月
+37	June	/dʒuːn/	n. 六月
+38	July	/dʒʊˈlaɪ/	n. 七月
+39	August	/ˈɔːɡəst/	n. 八月
+40	September	/sepˈtembə(r)/	n. 九月
+41	October	/ɒkˈtəʊbə(r)/	n. 十月
+42	November	/nəʊˈvembə(r)/	n. 十一月
+43	December	/dɪˈsembə(r)/	n. 十二月
+44	birthday	/ˈbɜːθdeɪ/	n. 生日
+45	bring	/brɪŋ/	v. 带来
+46	wear	/weə(r)/	v. 穿
+47	begin	/bɪˈɡɪn/	v. 开始
+48	interesting	/ˈɪntrəstɪŋ/	adj. 有趣的
+49	sound	/saʊnd/	v. 听起来 n. 声音
+50	wait	/weɪt/	v. 等候
+51	picture	/ˈpɪktʃə(r)/	n. 图片；绘画
+52	invitation	/ˌɪnvɪˈteɪʃn/	n. 请柬
+53	own	/əʊn/	v. 拥有 adj. 自己的
+54	present	/ˈpreznt/	n. 礼物
+55	busy	/ˈbɪzi/	adj. 忙碌的
+56	tired	/ˈtaɪəd/	adj. 疲倦的；累的
+57	Chinese	/ˌtʃaɪˈniːz/	n. 语文；中国人
+58	drill	/drɪl/	n. 电钻；钻机
+59	early	/ˈɜːli/	adv. 提早 adj. 早的
+60	taxi	/ˈtæksi/	n. 出租车
+61	underground	/ˈʌndəɡraʊnd/	n. 地铁
+62	zebra crossing	/ˌzebrə ˈkrɒsɪŋ/	n. 斑马线
+63	traffic lights	/'træfɪk 'laɪts/	n. 红绿灯
+64	pavement	/ˈpeɪvmənt/	n. 人行道
+65	on foot	/ɒn fʊt/	步行
+66	ride	/raɪd/	v. 骑（马；车）
+67	leave	/liːv/	v. 离开
+68	cross	/krɒs/	v. 穿过；越过
+69	right	/raɪt/	n. 右
+70	left	/left/	n. 左
+71	quickly	/ˈkwɪkli/	adv. 迅速地；很快地
+72	poster	/ˈpəʊstə(r)/	n. 海报
+73	correct	/kəˈrekt/	adj. 正确的 v. 纠正
+74	journey	/ˈdʒɜːni/	n. （尤指长途）旅行
+75	station	/ˈsteɪʃ(ə)n/	n. 站；站台
+76	get off	/ɡet ɒf/	从……下来
+77	stay	/steɪ/	v. 停留；保持原状
+78	report	/rɪˈpɔːt/	v. 汇报 n. 报告
+79	worker	/ˈwɜːkə(r)/	n. 工人
+80	pilot	/ˈpaɪlət/	n. 飞行员
+81	farmer	/ˈfɑːmə(r)/	n. 农夫；农民
+82	cook	/kʊk/	n. 厨师 v. 烹饪
+83	shop assistant	/ˈʃɒp əsɪstənt/	售货员；店员
+84	traveller	/ˈtrævələ(r)/	n. 旅行者
+85	singer	/ˈsɪŋə(r)/	n. 歌手
+86	lifeguard	/ˈlaɪfɡɑːd/	n. 救生员
+87	future	/ˈfjuːtʃə(r)/	n. 未来；将来
+88	want	/wɒnt/	v. 想要
+89	fly an aeroplane	/flaɪ æn ˈeərəpleɪn/	开飞机
+90	help sick people	/help sɪk ˈpiːp(ə)l/	帮助生病的人
+91	cook nice food	/kʊk naɪs fuːd/	做好吃的食物
+92	grow vegetables	/ɡrəʊ ˈvedʒtəb(ə)lz/	种蔬菜
+93	give lessons	/ɡɪv ˈlesnz/	讲课；授课
+94	sell things	/sel θɪŋz/	卖东西
+95	dream	/driːm/	n. 梦；梦想
+96	different	/ˈdɪfrənt/	adj. 不同的
+97	survey	/ˈsɜːveɪ/	n. 调查
+98	travel	/ˈtræv(ə)l/	v. （尤指长途）旅行
+99	suddenly	/ˈsʌdənli/	adv. 突然
+100	cry	/kraɪ/	v. 哭泣
+101	brave	/breɪv/	adj. 勇敢的
+102	pick	/pɪk/	v. 选择；采摘
+103	write an e-mail	/raɪt ən ˈiː meɪl/	写一封电子邮件
+104	go shopping	/ɡəʊ ˈʃɒpɪŋ/	去购物
+105	play chess	/pleɪ tʃes/	下（国际）象棋
+106	grandparents	/ˈɡrænpeərənts/	n. 祖父母；外祖父母
+107	how often	/haʊ ˈɒfn/	多长时间一次
+108	weekend	/ˌwiːkˈend/	n. 周末；双休日
+109	once	/wʌns/	adv. 一次
+110	twice	/twaɪs/	adv. 两次
+111	Internet	/ˈɪntənet/	n. 互联网；因特网
+112	on one’s way to …	/ɒn wʌnz weɪ tu/	在某人去……的路上
+113	wolf	/wʊlf/	n. 狼
+114	knock	/nɒk/	v. 敲击
+115	grandchild	/ˈɡræntʃaɪld/	n. （外）孙子；（外）孙女
+116	strange	/streɪndʒ/	adj. 奇怪的
+117	dear	/dɪə(r)/	adj. 亲爱的
+118	strong	/strɒŋ/	adj. 强壮的
+119	arm	/ɑːm/	n. 手臂
+120	sharp	/ʃɑːp/	adj. 锋利的
+121	teeth	/tiːθ/	n. 牙齿（复数）
+122	hug	/hʌɡ/	v. / n. 拥抱
+123	traditional	/trəˈdɪʃən(ə)l/	adj. 传统的
+124	festival	/ˈfestɪv(ə)l/	n. 节日
+125	go on an outing	/ɡəʊ ɒn ən ˈaʊtɪŋ/	（集体）外出游玩
+126	climb mountains	/klaɪm ˈmaʊntənz/	爬山
+127	see flower shows	/siː ˈflaʊə(r) ʃəʊz/	看花展
+128	get together	/ˈɡet təɡeðə(r)/	聚在一起
+129	have a good time	/hæv ə ɡʊd taɪm/	玩得愉快
+130	laugh	/lɑːf/	v. 笑 n. 笑声
+131	have fun	/hæv fʌn/	玩得高兴
+132	flat	/flæt/	n. 公寓
+133	puzzle	/ˈpʌz(ə)l/	n. 拼图游戏
+134	other	/ˈʌðə(r)/	adj. 另外的
+135	same	/seɪm/	adj. 相同的
+136	both	/bəʊθ/	pron. （两者）都
+137	all	/ɔːl/	pron. 所有；全体
+138	play volleyball	/pleɪ ˈvɒlibɔːl/	打排球
+139	play badminton	/pleɪ ˈbædmɪntən/	打羽毛球
+140	each other	/ˌiːtʃ ˈʌðə(r)/	彼此，互相
+141	member	/ˈmembə(r)/	n. 成员；会员
+142	football club	/ˈfʊtbɔːl klʌb/	足球俱乐部
+143	team	/tiːm/	n. 队；小组
+144	win	/wɪn/	v. 赢；获胜
+145	hero	/ˈhɪərəʊ/	n. 英雄
+146	difficult	/ˈdɪfɪkəlt/	adj. 困难的
+147	match	/mætʃ/	n. 火柴；比赛
+148	half-time	/ˌhɑːf ˈtaɪm/	n. 中场休息
+149	congratulations	/kənˌɡrætʃʊˈleɪʃ(ə)nz/	n. 祝贺
+150	skate	/skeɪt/	v. 滑冰；溜冰
+151	ride bicycles	/raɪd ˈbaɪsɪklz/	骑自行车
+152	snake	/sneɪk/	n. 蛇
+153	spider	/ˈspaɪdə(r)/	n. 蜘蛛
+154	vet	/vet/	n. 兽医
+155	pretty	/ˈprɪti/	adj. 漂亮的
+156	bee	/biː/	n. 蜜蜂
+157	north	/nɔːθ/	n. 北；北方 adv. 向北；朝北
+158	south	/saʊθ/	n. 南；南方 adv. 向南；朝南
+159	west	/west/	n. 西；西方 adv. 向西；朝西
+160	east	/iːst/	n. 东；东方 adv. 向东；朝东
+161	move home	/muːv həʊm/	搬家
+162	because	/bɪˈkəz; bɪˈkɒz/	conj. 因为；由于
+163	lovely	/ˈlʌvli/	adj. 可爱的
+164	face	/feɪs/	n. 脸
+165	sunshine	/ˈsʌnʃaɪn/	n. 阳光
+166	study	/ˈstʌdi/	n. 书房 v. 学习
+167	living room	/ˈlɪvɪŋ ruːm/	n. 客厅；起居室
+168	dining room	/ˈdaɪnɪŋ ruːm/	n. 餐厅
+169	garden	/ˈɡɑːdn/	n. 花园
+170	bathroom	/ˈbɑːθruːm/	n. 浴室
+171	bedroom	/ˈbedruːm/	n. 卧室
+172	kitchen	/ˈkɪtʃɪn/	n. 厨房
+173	share	/ʃeə(r)/	v. 分享
+174	shine	/ʃaɪn/	v. 闪耀
+175	through	/θruː/	prep. 穿过；透过
+176	wild goose	/waɪld ɡuːs/	n. 大雁
+177	change	/tʃeɪndʒ/	v. 换；变化
+178	find	/faɪnd/	v. 找到；发现
+179	enough	/ɪˈnʌf/	adj. 充足的；足够的
+180	miss	/mɪs/	v. 想念
+181	van	/væn/	n. 货车
+182	roof	/ruːf/	n. 屋顶
+183	hotel	/həʊˈtel/	n. 旅馆；酒店
+184	bank	/bæŋk/	n. 银行
+185	hospital	/ˈhɒspɪt(ə)l/	n. 医院
+186	bakery	/ˈbeɪkəri/	n. 面包店
+187	museum	/mjuˈziːəm/	n. 博物馆
+188	cinema	/ˈsɪnəmə/	n. 电影院
+189	walk along	/wɔːk əˈlɒŋ/	沿着……走
+190	go along	/ɡəʊ əˈlɒŋ/	沿着……走
+191	turn left	/tɜːn left/	向左转
+192	turn right	/tɜːn raɪt/	向右转
+193	map	/mæp/	n. 地图
+194	crocodile	/ˈkrɒkədaɪl/	n. 鳄鱼
+195	lane	/leɪn/	n. 小路；小巷
+196	Ocean World	/ˈəʊʃ(ə)n wɜːld/	n. 海洋世界
+197	shark	/ʃɑːk/	n. 鲨鱼
+198	dolphin	/ˈdɒlfɪn/	n. 海豚
+199	look for	/lʊk fɔː(r)/	寻找
+200	crossing	/ˈkrɒsɪŋ/	n. 十字路口
+201	naughty	/ˈnɔːti/	adj. 顽皮的
+202	sign	/saɪn/	n. 标牌；标志
+203	part	/pɑːt/	n. 部分
+204	button	/ˈbʌt(ə)n/	n. 纽扣
+205	zip	/zɪp/	n. 拉链
+206	pocket	/ˈpɒkɪt/	n. 口袋
+207	put on	/pʊt ɒn/	穿上（衣服）
+208	clothes shop	/kləʊðz ʃɒp/	服装店
+209	try on	/traɪ ɒn/	试穿
+210	emperor	/ˈempərə(r)/	n. 皇帝
+211	magic	/ˈmædʒɪk/	n. 魔术；魔法 adj. 神奇的
+212	only	/ˈəʊnli/	adv. 只有；仅 adj. 唯一的
+213	clever	/ˈklevə(r)/	adj. 聪明的
+214	nod	/nɒd/	v. 点头
+215	silent	/ˈsaɪlənt/	adj. 沉默的；安静的
+216	cry out	/kraɪ aʊt/	喊叫；大叫
+217	nothing	/ˈnʌθɪŋ/	pron. 没有什么
+218	dot	/dɒt/	n. 点
+219	fever	/ˈfiːvə(r)/	n. 发烧
+220	toothache	/ˈtuːθeɪk/	n. 牙痛
+221	cough	/kɒf/	v. / n. 咳嗽
+222	cold	/kəʊld/	n. 感冒 adj. 冷的
+223	should	/ʃʊd/	modal v. 应该
+224	feel well	/fiːl wel/	感觉良好
+225	wrong	/rɒŋ/	adj. 错误的；有问题的
+226	medicine	/ˈmedsn; ˈmedɪsn/	n. 药
+227	rest	/rest/	v. / n. 休息
+228	better	/ˈbetə(r)/	adj. / adv. 更好
+229	dentist	/ˈdentɪst/	n. 牙医
+230	soft drinks	/sɒft drɪŋks/	n. 软饮料（不含酒精）
+231	be bad for	/bi bæd fɔː(r)/	对……有害
+232	either	/ˈaɪðə(r)/	adv. （用于否定句）也
+233	toothless	/ˈtuːθləs/	adj. 没有牙齿的
+234	king	/kɪŋ/	n. 国王
+235	forest	/ˈfɒrɪst/	n. 森林
+236	hide	/haɪd/	v. 隐藏
+237	secret	/ˈsiːkrət/	adj. 隐秘的；秘密的
+238	cave	/keɪv/	n. 洞穴；山洞
+239	packet	/ˈpækɪt/	n. 包裹
+240	ouch	/aʊtʃ/	int. 哎哟
+241	pull … out	/ˈpʊl aʊt/	把……拔下来
+242	term	/tɜːm/	n. 学期
+243	nurse	/nɜːs/	n. 护士
+244	turn	/tɜːn/	v. 转动；转弯
+245	first	/fɜːst/	adv. 首先
+246	next	/nekst/	adv. 其次；接下来
+247	then	/ðen/	adv. 然后
+248	finally	/ˈfaɪnəli/	adv. 最后
+249	make tea	/meɪk tiː/	泡茶
+250	boil	/bɔɪl/	v. 煮沸；烧开
+251	teapot	/ˈtiːpɒt/	n. 茶壶
+252	pour	/pɔː(r)/	v. 倒出
+253	taste	/teɪst/	v. 尝起来；品尝
+254	the Yangtze River	/ðə ˈjæŋtsi ˈrɪvə(r)/	长江
+255	meet	/miːt/	v. 遇见
+256	flow	/fləʊ/	v. 流；流动
+257	port	/pɔːt/	n. 港口
+258	raindrop	/ˈreɪndrɒp/	n. 雨点；雨滴
+259	fall	/fɔːl/	v. 落下
+260	really	/ˈriːəli/	adv. 真正地
+261	rise	/raɪz/	v. 上升；升起
+262	thirsty	/ˈθɜːsti/	adj. 渴的
+263	sunlight	/ˈsʌnlaɪt/	n. 阳光；日光
+264	hold	/həʊld/	v. 持有；抓住
+265	cheap	/tʃiːp/	adj. 便宜的
+266	cage	/keɪdʒ/	n. 笼子
+267	jam	/dʒæm/	n. 果酱
+268	pleasure	/ˈpleʒə(r)/	n. 高兴
+269	television	/ˈtelɪvɪʒn/	n. 电视机
+270	gently	/ˈdʒentli/	adv. 轻轻地
+271	strongly	/'strɒŋli/	adv. 强有力地；猛烈地
+272	slowly	/ˈsləʊli/	adv. 慢慢地
+273	heavily	/ˈhevɪli/	adv. 剧烈地；猛烈地
+274	blow	/bləʊ/	v. 吹；刮
+275	windmill	/ˈwɪndmɪl/	n. 风车
+276	tomorrow	/təˈmɒrəʊ/	n. 明天
+277	fine	/faɪn/	adj. 晴朗的
+278	be made of	/bi meɪd ɒv/	由……做成
+279	circle	/ˈsɜːkl/	n. 圆圈
+280	line	/laɪn/	n. 线
+281	fold	/fəʊld/	v. 折叠
+282	pin	/pɪn/	n. 大头针
+283	trunk	/trʌŋk/	n. 树干
+284	triangle	/ˈtraɪæŋɡ(ə)l/	n. 三角形
+285	traffic	/ˈtræfɪk/	n. 交通
+286	Don’t smoke!	/dəʊnt sməʊk/	禁止吸烟！
+287	Don’t start campfires!	/dəʊnt stɑːt ˈkæmpfaɪəz/	不要生火！
+288	Don’t play near fires!	/dəʊnt pleɪ nɪə(r) ˈfaɪəz/	不要在火附近玩耍！
+289	Don’t play with matches!	/dəʊnt pleɪ wɪð ˈmætʃɪz/	不要玩火柴！
+290	mustn’t	/ˈmʌsnt/	modal v. 不能；禁止
+291	firefighter	/ˈfaɪəfaɪtə(r)/	n. 消防员
+292	safety	/ˈseɪfti/	n. 安全
+293	burn	/bɜːn/	v. 燃烧
+294	luckily	/ˈlʌkɪli/	adv. 幸运地
+295	hurt	/hɜːt/	v. 疼痛；受伤
+296	country	/ˈkʌntri/	n. 乡下；乡村；国家
+297	smoke	/sməʊk/	v. 吸烟
+298	helicopter	/ˈhelɪkɒptə(r)/	n. 直升飞机
+299	drop	/drɒp/	v. 使降落；空投
+300	bravely	/ˈbreɪvli/	adv. 勇敢地
+301	soon	/suːn/	adv. 很快；马上
+302	die down	/daɪ daʊn/	（火）熄灭
+303	sign	/saɪn/	n. 标牌；标志
+304	the Stone Age	/ðə ˈstəʊn eɪdʒ/	石器时代
+305	heat	/hiːt/	n. 热量；高温
+306	light	/laɪt/	n. 灯；光线
+307	raw	/rɔː/	adj. 生的；没有熟的
+308	hate	/heɪt/	v. 憎恨；厌恶
+309	throw … away	/θrəʊ əˈweɪ/	把……扔掉
+310	lift	/lɪft/	v. 举起
+311	dangerous	/ˈdeɪndʒərəs/	adj. 危险的
+312	smoky	/ˈsməʊki/	adj. 烟雾弥漫的
+313	cover	/ˈkʌvə(r)/	v. 遮盖；覆盖
+314	crawl	/krɔːl/	v. 爬行
+315	notebook	/ˈnəʊtbʊk/	n. 笔记本
+316	paints	/peɪnts/	n. 绘画颜料
+317	crayon	/ˈkreɪən/	n. 蜡笔
+318	school bag	/ˈskuːlˌbæg/	n. 书包
+319	tape	/teɪp/	n. 胶带
+320	glue	/ɡluː/	n. 胶水
+321	brush	/brʌʃ/	n. 毛笔；画笔
+322	picture book	/ˈpɪktʃə bʊk/	n. 画册
+323	mine	/maɪn/	pron. 我的
+324	yours	/jɔːz/	pron. 你的；你们的
+325	his	/hɪz/	pron. 他的
+326	hers	/hɜːz/	pron. 她的
+327	ours	/ˈaʊəz/	pron. 我们的
+328	theirs	/ðeəz/	pron. 他们的
+329	mess	/mes/	n. 杂乱；不整洁
+330	tidy up	/ˈtaɪdi ʌp/	收拾；整理
+331	space	/speɪs/	n. 太空；空间
+332	grade	/ɡreɪd/	n. 等级；成绩
+333	die	/daɪ/	v. 死亡
+334	lie	/laɪ/	v. 躺 n. 谎言
+335	weight	/weɪt/	n. 重量
+336	workshop	/ˈwɜːkʃɒp/	n. 车间；工场
+337	nail	/neɪl/	n. 指甲
+338	careful	/ˈkeəfl/	adj. 仔细的；小心的
+339	magnet	/ˈmæɡnət/	n. 磁铁
+340	stick to	/stɪk tuː/	粘住；粘贴
+341	caterpillar	/ˈkætəpɪlə(r)/	n. 毛毛虫
+342	butterfly	/ˈbʌtəflaɪ/	n. 蝴蝶
+343	chick	/tʃɪk/	n. 小鸡
+344	chicken	/ˈtʃɪkɪn/	n. 鸡；鸡肉
+345	duckling	/ˈdʌklɪŋ/	n. 小鸭
+346	duck	/dʌk/	n. 鸭子
+347	puppy	/ˈpʌpi/	n. 小狗
+348	dog	/dɒɡ/	n. 狗
+349	grow	/ɡrəʊ/	v. 生长；成长
+350	insect	/ˈɪnsekt/	n. 昆虫
+351	cocoon	/kəˈkuːn/	n. 茧
+352	silkworm	/ˈsɪlkwɜːm/	n. 蚕
+353	silk	/sɪlk/	n. （蚕）丝；丝绸
+354	wing	/wɪŋ/	n. 翅膀
+355	lay eggs	/leɪ eɡz/	下蛋；产卵
+356	bright	/braɪt/	adj. 明亮的
+357	deer	/dɪə(r)/	n. 鹿
+358	cheer	/tʃɪk/	v. 欢呼
+359	born	/bɔːn/	v. 出生
+360	tail	/teɪl/	n. 尾巴
+361	catch	/kætʃ/	v. 抓住
+362	fly	/flaɪ/	v. 飞翔；飞行 n. 苍蝇
+363	turtle	/ˈtɜːt(ə)l/	n. 海龟
+364	lorry	/ˈlɒri/	n. 卡车
+365	bus	/bʌs/	n. 公共汽车
+366	car	/kɑː(r)/	n. 汽车
+367	motorbike	/ˈməʊtəbaɪk/	n. 摩托车
+368	noisy	/ˈnɔɪzi/	adj. 吵闹的
+369	outside	/ˈaʊtsaɪd/	adv. 外面
+370	another	/əˈnʌðə(r)/	pron. 又一；另一（事物或人）
+371	quiet	/ˈkwaɪət/	adj. 安静的
+372	loud	/laʊd/	adj. 大声的；喧闹的
+373	sat	/sæt/	v. 坐（sit 的过去式）
+374	cartoon	/kɑːˈtuːn/	n. 卡通；动画片
+375	sofa	/ˈsəʊfə/	n. 沙发
+376	pop	/pɒp/	n. 流行音乐
+377	square	/skweə(r)/	n. 正方形；广场
+378	music	/ˈmjuːzɪk/	n. 音乐
+379	enjoy	/ɪnˈdʒɔɪ/	v. 享受
+380	play the drum	/pleɪ ðə drʌm/	打鼓
+381	place	/pleɪs/	n. 位置；地方
+382	Mars	/mɑːz/	n. 火星
+383	joy	/dʒɔɪ/	n. 快乐；喜悦
+384	point	/pɔɪnt/	n. 点
+385	toilet	/ˈtɔɪlət/	n. 厕所；洗手间
+386	sure	/ʃʊə(r)/	adv. 当然
+387	tour	/tʊə/	n. 旅行
+388	poor	/pɔː(r); pʊə(r)/	adj. 贫穷的
+389	kingdom	/ˈkɪŋdəm/	n. 王国
+390	everything	/ˈevriθɪŋ/	pron. 所有事物；一切
+391	loudest	/ˈlaʊdɪst/	adj. 最响的
+392	shout	/ʃaʊt/	v. 叫喊；呼喊
+393	meat	/miːt/	n. 肉；肉类
+394	pork	/pɔːk/	n. 猪肉
+395	beef	/biːf/	n. 牛肉
+396	chicken	/ˈtʃɪkɪn/	n. 鸡；鸡肉
+397	fish	/fɪʃ/	n. 鱼；鱼肉
+398	vegetables	/ˈvedʒtəb(ə)lz/	n. 蔬菜
+399	tomatoes	/təˈmɑːtəʊz/	n. 番茄；西红柿
+400	potatoes	/pəˈteɪtəʊz/	n. 土豆；马铃薯
+401	carrots	/ˈkærəts/	n. 胡萝卜
+402	cabbages	/ˈkæbɪdʒɪz/	n. 卷心菜
+403	beans	/biːnz/	n. 豆；菜豆；豆荚
+404	fruit	/fruːt/	n. 水果
+405	apples	/ˈæp(ə)lz/	n. 苹果
+406	oranges	/ˈɒrɪndʒɪz/	n. 橙子；橙色
+407	bananas	/bəˈnɑːnəz/	n. 香蕉
+408	grapes	/ɡreɪps/	n. 葡萄
+409	rice	/raɪs/	n. 米饭
+410	noodles	/ˈnuːd(ə)lz/	n. 面条
+411	bread	/bred/	n. 面包
+412	drinks	/drɪŋks/	n. 饮料
+413	juice	/dʒuːs/	n. 果汁
+414	water	/ˈwɔːtə(r)/	n. 水
+415	milk	/mɪlk/	n. 牛奶
+416	tea	/tiː/	n. 茶
+417	hamburger	/ˈhæmbɜːɡə(r)/	n. 汉堡包
+418	cola	/ˈkəʊlə/	n. 可乐
+419	ice cream	/ˈaɪs kriːm/	n. 冰淇淋
+420	chocolate	/ˈtʃɒklət/	n. 巧克力
+421	sweet	/swiːt/	n. 糖果 adj. 甜的
+422	healthy	/ˈhelθi/	adj. 健康的
+423	unhealthy	/ʌnˈhelθi/	adj. 不健康的
+424	important	/ɪmˈpɔːt(ə)nt/	adj. 重要的
+425	play sport	/pleɪ spɔːt/	做运动
+426	fridge	/frɪdʒ/	n. 冰箱
+427	ham	/hæm/	n. 火腿
+428	photo	/ˈfəʊtəʊ/	n. 照片
+429	hole	/həʊl/	n. 洞；坑
+430	bowl	/bəʊl/	n. 碗
+431	crow	/krəʊ/	n. 乌鸦
+432	bow	/baʊ/	v. 鞠躬；点头
+433	ticket	/ˈtɪkɪt/	n. 票
+434	ticket office	/ˈtɪkɪt ˈɒfɪs/	n. 售票处
+435	entrance	/ˈentrəns/	n. 入口
+436	exit	/ˈeksɪt/	n. 出口
+437	seat	/siːt/	n. 座位；席位
+438	see a film	/siː ə fɪlm/	看电影
+439	tadpole	/ˈtædpəʊl/	n. 蝌蚪
+440	funny	/ˈfʌni/	adj. 有趣的
+441	princess	/ˌprɪnˈses/	n. 公主；王妃
+442	dwarf	/dwɔːf/	n. 小矮人
+443	swan	/swɒn/	n. 天鹅
+444	rat	/ræt/	n. 老鼠，耗子
+445	cream	/kriːm/	n. 奶油
+446	Snow White	/snəʊ waɪt/	白雪公主
+447	mirror	/ˈmɪrə(r)/	n. 镜子
+448	fairest	/ˈfeərɪst/	adj. 最美丽的
+449	queen	/kwiːn/	n. 女王；王后
+450	hunter	/ˈhʌntə(r)/	n. 猎人
+451	fall asleep	/fɔːl əˈsliːp/	入睡
+452	wake up	/weɪk ʌp/	唤醒；弄醒
+453	happen	/ˈhæpən/	v. 发生
+454	find out	/faɪnd aʊt/	找出；发现
+455	Chinese	/ˌtʃaɪˈniːz/	n. 语文；中国人
+456	English	/ˈɪŋɡlɪʃ/	n. 英语
+457	Maths	/mæθs/	n. 数学
+458	Art	/ɑːt/	n. 美术；艺术
+459	Music	/ˈmjuːzɪk/	n. 音乐
+460	IT	/ˌaɪ ˈtiː/	n. 信息技术
+461	PE	/ˌpiː ˈiː/	n. 体育
+462	subject	/ˈsʌbdʒɪkt/	n. 科目
+463	timetable	/ˈtaɪmteɪbl/	n. 时间表；课程表
+464	break	/breɪk/	n. 间歇；休息
+465	just	/dʒʌst/	adv. 只是；正好
+466	look like	/lʊk laɪk/	看起来像
+467	carefully	/ˈkeəfəlɪ/	adv. 仔细地；小心地
+468	maybe	/ˈmeɪbi/	adv. 也许
+469	telephone	/ˈtelɪfəʊn/	n. 电话；电话机
+470	restaurant	/ˈrestrɒnt/	n. 餐馆；饭店
+471	No smoking!	/nəʊ ˈsməʊkɪŋ/	禁止吸烟！
+472	No swimming!	/nəʊ ˈswɪmɪŋ/	禁止游泳！
+473	Don’t litter!	/dəʊnt ˈlɪtə(r)/	不要乱扔垃圾！
+474	Don’t walk on the grass!	/dəʊnt wɔːk ɒn ðə ɡrɑːs/	不要踩踏草坪！
+475	bench	/bentʃ/	n. 长椅
+476	park keeper	/pɑːk ˈkiːpə(r)/	公园管理员
+477	mean	/miːn/	v. 意指；意味着
+478	throw	/θrəʊ/	v. 抛；扔
+479	rubbish	/ˈrʌbɪʃ/	n. 垃圾
+480	radio	/ˈreɪdiəʊ/	n. 收音机
+481	blouse	/blaʊz/	n. 女士衬衫
+482	path	/pɑːθ/	n. 小径；小道
+483	stone	/stəʊn/	n. 石头
+484	stepmother	/ˈstepmʌðə(r)/	n. 继母
+485	herself	/hɜːˈself/	pron. 她自己
+486	on the way to	/ɒn ðə weɪ tu/	在去……的路上
+487	lost	/lɒst/	adj. 迷路的
+488	worry	/ˈwʌri/	v. / n. 担心
+489	follow	/ˈfɒləʊ/	v. 跟随
+490	cloud	/klaʊd/	n. 云
+491	cloudy	/ˈklaʊdi/	adj. 多云的；阴天的
+492	sun	/sʌn/	n. 太阳
+493	sunny	/ˈsʌni/	adj. 晴朗的
+494	rainy	/ˈreɪni/	adj. 多雨的
+495	wind	/wɪnd/	n. 风
+496	windy	/ˈwɪndi/	adj. 多风的
+497	snow	/snəʊ/	n. 雪
+498	snowy	/ˈsnəʊi/	adj. 下雪的
+499	storm	/stɔːm/	n. 暴风雨
+500	stormy	/ˈstɔːmi/	adj. 有暴风雨的
+501	fog	/fɒɡ/	n. 雾
+502	foggy	/ˈfɒɡi/	adj. 有雾的
+503	degree	/dɪˈɡriː/	n. 度；度数（温度单位）
+504	yesterday	/ˈjestədeɪ/	adv. （在）昨天
+505	temperature	/ˈtemprətʃə(r)/	n. 温度
+506	weather report	/ˈweðə(r) rɪˈpɔːt/	天气预报
+507	tonight	/təˈnaɪt/	adv. （在）今晚
+508	typhoon	/taɪˈfuːn/	n. 台风
+509	plant	/plɑːnt/	v. 种植 n. 植物
+510	built	/bɪlt/	v. 建造（build 的过去式）
+511	comfortable	/ˈkʌmftəbl/	adj. 舒服的；安逸的
+512	cupboard	/ˈkʌbəd/	n. 橱柜；衣柜
+513	bookshelf	/ˈbʊkʃelf/	n. 书架
+514	bed	/bed/	n. 床
+515	lamp	/læmp/	n. 台灯
+516	cushion	/ˈkʊʃn/	n. 坐垫；靠垫
+517	sofa	/ˈsəʊfə/	n. 沙发
+518	furniture	/ˈfɜːnɪtʃə(r)/	n. 家具
+519	surprise	/səˈpraɪz/	n. 惊喜
+520	clock	/klɒk/	n. 钟
+521	village	/ˈvɪlɪdʒ/	n. 乡村；村庄
+522	fisherman	/ˈfɪʃəmən/	n. 渔民；渔夫
+523	town	/taʊn/	n. 小镇
+524	building	/ˈbɪldɪŋ/	n. 建筑物
+525	science museum	/ˈsaɪəns mjuˈziːəm/	科学博物馆
+526	art museum	/ɑːt mjuˈziːəm/	美术博物馆
+527	history museum	/ˈhɪst(ə)ri mjuˈziːəm/	历史博物馆
+528	insect museum	/ˈɪnsekt mjuˈziːəm/	昆虫博物馆
+529	car museum	/kɑː(r) mjuˈziːəm/	汽车博物馆
+530	railway museum	/ˈreɪlweɪ mjuˈziːəm/	铁路博物馆
+531	world	/wɜːld/	n. 世界
+532	robot	/ˈrəʊbɒt/	n. 机器人
+533	prince	/prɪns/	n. 王子
+534	Beijing Opera	/ˌbeɪˈdʒɪŋ ˈɒprə/	n. 京剧
+535	perform	/pəˈfɔːm/	v. 表演
+536	useful	/ˈjuːsfl/	adj. 有用的
+537	bug	/bʌɡ/	n. 小昆虫；虫子
+538	ground floor	/ˌɡraʊnd ˈflɔː(r)/	n. 底楼；一楼
+539	the Louvre Museum	/ðə ˈluːvə(r) mjuˈziːəm/	卢浮宫（博物馆）
+540	Paris	/ˈpærɪs/	n. 巴黎
+541	human	/ˈhjuːmən/	n. 人类
+542	history	/ˈhɪst(ə)ri/	n. 历史
+543	culture	/ˈkʌltʃə(r)/	n. 文化；文明
+544	thousands of	/ˈθaʊz(ə)ndz ɒv/	成千上万的
+545	painting	/ˈpeɪntɪŋ/	n. 画；油画
+546	famous	/ˈfeɪməs/	adj. 著名的
+547	trip	/trɪp/	n. 旅行
+548	again	/əˈɡeɪn; əˈɡen/	adv. 再一次；又一次
+549	Christmas	/ˈkrɪsməs/	圣诞节
+550	Thanksgiving	/ˌθæŋksˈɡɪvɪŋ/	感恩节
+551	pumpkin pie	/ˈpʌmpkɪn paɪ/	南瓜派
+552	turkey	/ˈtɜːki/	n. 火鸡
+553	western	/ˈwestən/	adj. 西方的
+554	decorate	/ˈdekəreɪt/	v. 装饰；布置
+555	put up	/pʊt ʌp/	张贴
+556	wait for	/weɪt fɔː(r)/	等待
+557	Father Christmas	/ˈfɑːðə(r) ˈkrɪsməs/	圣诞老人
+558	special	/ˈspeʃl/	adj. 特殊的
+559	moment	/ˈməʊmənt/	n. 时光；时刻
+560	the Dragon Boat Festival	/ðə ˈdræɡən bəʊt ˈfestɪvl/	端午节
+561	thank-you card	/θæŋk ju kɑːd/	感谢卡
+562	way	/weɪ/	n. 方法；路
+563	laugh at	/lɑːf æt/	嘲笑
+564	Christmas Eve	/ˌkrɪsməs ˈiːv/	圣诞夜
+565	giant	/ˈdʒaɪənt/	n. 巨人
+566	castle	/ˈkɑːsl/	n. 城堡
+567	angry	/ˈæŋɡri/	adj. 生气的
+568	build	/bɪld/	v. 建造
+569	break down	/breɪk daʊn/	推倒；毁掉
+570	forever	/fərˈevə(r)/	adv. 永远；永久`;
+
+    // 六年级上册 (287词)
+    const rawVol6_1 = `1	life	/laɪf/	n. 生活；生命
+2	break	/breɪk/	n. 课间休息；间歇；休息
+3	ICT	/ˌaɪ siː ˈtiː/	n. 信息通信技术（课程）
 4	geography	/dʒɪˈɒɡrəfi/	n. 地理
 5	history	/ˈhɪstri/	n. 历史
-6	French	/frentʃ/	n. 法语
-7	more	/mɔː(r)/	det. 更多的
-8	instruction	/ɪnˈstrʌkʃn/	n. 指示
-9	experiment	/ɪkˈsperɪmənt/	n. 实验
+6	French	/frentʃ/	n. 法语；adj. 法国的
+7	more	/mɔː(r)/	det. & pron. 更多的
+8	instruction	/ɪnˈstrʌkʃn/	n. 指示；命令
+9	experiment	/ɪkˈsperɪmənt/	n. 实验；试验
 10	activity	/ækˈtɪvəti/	n. 活动
 11	club	/klʌb/	n. 社团
 12	calligraphy	/kəˈlɪɡrəfi/	n. 书法
@@ -236,248 +794,278 @@
 16	lab	/læb/	n. 实验室
 17	field	/fiːld/	n. 场地
 18	grade	/ɡreɪd/	n. 年级
-19	excuse	/ɪkˈskjuːz/	v. 原谅
-20	project	/ˈprɒdʒekt/	n. 项目
-21	start	/stɑːt/	v. 开始
-22	topic	/ˈtɒpɪk/	n. 话题
-23	online	/ˌɒnˈlaɪn/	adv. 在线
-24	receive	/rɪˈsiːv/	v. 接到
-25	reply	/rɪˈplaɪ/	n. 回答
-26	group	/ɡruːp/	n. 组
-27	most	/məʊst/	adv. 最
-28	end	/end/	v. 结束
-29	difference	/ˈdɪfrəns/	n. 差别
-30	same	/seɪm/	adj. 一样的
-31	during	/ˈdjʊərɪŋ/	prep. 在…期间
-32	outside	/ˌaʊtˈsaɪd/	adv. 在外面
-33	noon	/nuːn/	n. 正午
-34	connect	/kəˈnekt/	v. 连接
-35	comment	/ˈkɒment/	n. 评论
-36	tie	/taɪ/	n. 联系
-37	relation	/rɪˈleɪʃn/	n. 关系
-38	introduce	/ˌɪntrəˈdjuːs/	v. 介绍
-39	classmate	/ˈklɑːsmeɪt/	n. 同学
-40	relative	/ˈrelətɪv/	n. 亲戚
-41	only	/ˈəʊnli/	adj. 唯一的
-42	twin	/twɪn/	n. 双胞胎
-43	husband	/ˈhʌzbənd/	n. 丈夫
-44	wife	/waɪf/	n. 妻子
-45	son	/sʌn/	n. 儿子
-46	daughter	/ˈdɔːtə(r)/	n. 女儿
-47	other	/ˈʌðə(r)/	adj. 其他
-48	member	/ˈmembə(r)/	n. 成员
-49	add	/æd/	v. 添加
-50	note	/nəʊt/	n. 笔记
-51	album	/ˈælbəm/	n. 相册
-52	teach	/tiːtʃ/	v. 教
-53	homework	/ˈhəʊmwɜːk/	n. 家庭作业
-54	guitar	/ɡɪˈtɑː(r)/	n. 吉他
-55	elder	/ˈeldə(r)/	adj. 年长的
-56	sofa	/ˈsəʊfə/	n. 长沙发
-57	round	/raʊnd/	adj. 圆形的
-58	dark	/dɑːk/	adj. 黑暗的
-59	chess	/tʃes/	n. 象棋
-60	duty	/ˈdjuːti/	n. 责任
-61	born	/bɔːn/	v. 出生
-62	weekend	/ˌwiːkˈend/	n. 周末
-63	thing	/θɪŋ/	n. 事情
-64	enough	/ɪˈnʌf/	adv. 足够地
-65	dish	/dɪʃ/	n. 菜肴
-66	usually	/ˈjuːʒuəli/	adv. 通常
-67	quick	/kwɪk/	adj. 快的
-68	together	/təˈɡeðə(r)/	adv. 在一起
-69	flat	/flæt/	n. 公寓
-70	fun	/fʌn/	n. 乐趣
-71	celebration	/ˌselɪˈbreɪʃn/	n. 庆典
-72	prepare	/prɪˈpeə(r)/	v. 准备
-73	decorate	/ˈdekəreɪt/	v. 装饰
-74	balloon	/bəˈluːn/	n. 气球
-75	set	/set/	v. 放置
-76	surprised	/səˈpraɪzd/	adj. 惊奇的
-77	joy	/dʒɔɪ/	n. 快乐
-78	something	/ˈsʌmθɪŋ/	pron. 某事
-79	beef	/biːf/	n. 牛肉
-80	tofu	/ˈtəʊfuː/	n. 豆腐
-81	pepper	/ˈpepə(r)/	n. 甜椒
-82	cabbage	/ˈkæbɪdʒ/	n. 卷心菜
-83	onion	/ˈʌnjən/	n. 洋葱
-84	carrot	/ˈkærət/	n. 胡萝卜
-85	watermelon	/ˈwɔːtəmelən/	n. 西瓜
-86	cucumber	/ˈkjuːkʌmbə(r)/	n. 黄瓜
-87	strawberry	/ˈstrɔːbəri/	n. 草莓
-88	pear	/peə(r)/	n. 梨
-89	yogurt	/ˈjɒɡət/	n. 酸奶
-90	cheese	/tʃiːz/	n. 奶酪
-91	corn	/kɔːn/	n. 玉米
-92	oil	/ɔɪl/	n. 油
-93	salt	/sɔːlt/	n. 盐
-94	bean	/biːn/	n. 豆
-95	product	/ˈprɒdʌkt/	n. 产品
-96	grain	/ɡreɪn/	n. 谷物
-97	rainbow	/ˈreɪnbəʊ/	n. 彩虹
-98	balanced	/ˈbælənst/	adj. 平衡的
-99	diet	/ˈdaɪət/	n. 饮食
-100	each	/iːtʃ/	det. 每个
-101	plenty	/ˈplenti/	pron. 大量
-102	choice	/tʃɔɪs/	n. 选择
-103	list	/lɪst/	n. 清单
-104	few	/fjuː/	det. 很少
-105	pleasure	/ˈpleʒə(r)/	n. 快乐
-106	ingredient	/ɪnˈɡriːdiənt/	n. 成分
-107	tasty	/ˈteɪsti/	adj. 美味的
-108	need	/niːd/	v. 需要
-109	fridge	/frɪdʒ/	n. 冰箱
-110	surprise	/səˈpraɪz/	n. 惊喜
-111	blog	/blɒɡ/	n. 博客
-112	as	/æz/	prep. 作为
-113	into	/ˈɪntuː/	prep. 进入
-114	piece	/piːs/	n. 碎片
-115	fry	/fraɪ/	v. 油炸
-116	finally	/ˈfaɪnəli/	adv. 最后
-117	boil	/bɔɪl/	v. 煮沸
-118	side	/saɪd/	n. 侧面
-119	mutton	/ˈmʌtn/	n. 羊肉
-120	recipe	/ˈresəpi/	n. 食谱
-121	beat	/biːt/	v. 搅拌
-122	chopsticks	/ˈtʃɒpstɪks/	n. 筷子
-123	bowl	/bəʊl/	n. 碗
-124	menu	/ˈmenjuː/	n. 菜单
-125	date	/deɪt/	n. 日期
-126	gym	/dʒɪm/	n. 体育馆
-127	team	/tiːm/	n. 队
-128	high	/haɪ/	adj. 高的
-129	rope	/rəʊp/	n. 绳
-130	kick	/kɪk/	v. 踢
-131	rock	/rɒk/	n. 岩石
-132	climb	/klaɪm/	v. 攀登
-133	Frisbee	/ˈfrɪzbi/	n. 飞盘
-134	active	/ˈæktɪv/	adj. 活跃的
-135	part	/pɑːt/	n. 部分
-136	baseball	/ˈbeɪsbɔːl/	n. 棒球
-137	volleyball	/ˈvɒlibɔːl/	n. 排球
-138	badminton	/ˈbædmɪntən/	n. 羽毛球
-139	tennis	/ˈtenɪs/	n. 网球
-140	pull	/pʊl/	v. 拉
-141	safety	/ˈseɪfti/	n. 安全
-142	ankle	/ˈæŋkl/	n. 踝
-143	match	/mætʃ/	n. 比赛
-144	gear	/ɡɪə(r)/	n. 装备
-145	example	/ɪɡˈzɑːmpl/	n. 例子
-146	matter	/ˈmætə(r)/	n. 问题
-147	happen	/ˈhæpən/	v. 发生
-148	just	/dʒʌst/	adv. 只是
-149	fall	/fɔːl/	v. 跌倒
-150	guess	/ɡes/	v. 猜测
-151	cut	/kʌt/	n. 伤口
-152	knee	/niː/	n. 膝盖
-153	seem	/siːm/	v. 似乎
-154	problem	/ˈprɒbləm/	n. 问题
-155	score	/skɔː(r)/	v. 得分
-156	goal	/ɡəʊl/	n. 目标
-157	goalkeeper	/ˈɡəʊlkiːpə(r)/	n. 守门员
-158	hold	/həʊld/	v. 抓住
-159	throw	/θrəʊ/	v. 投
-160	point	/pɔɪnt/	n. 点
-161	control	/kənˈtrəʊl/	v. 控制
-162	mind	/maɪnd/	n. 头脑
-163	powerful	/ˈpaʊəfl/	adj. 强有力的
-164	style	/staɪl/	n. 风格
-165	moment	/ˈməʊmənt/	n. 时刻
-166	report	/rɪˈpɔːt/	v. 报告
-167	newspaper	/ˈnjuːzpeɪpə(r)/	n. 报纸
-168	court	/kɔːt/	n. 球场
-169	against	/əˈɡenst/	prep. 反对
-170	shoot	/ʃuːt/	v. 射门
-171	basket	/ˈbɑːskɪt/	n. 篮
-172	tie	/taɪ/	v. 平局
-173	bravo	/ˌbrɑːˈvəʊ/	excl. 好哇
-174	track	/træk/	n. 跑道
-175	amazing	/əˈmeɪzɪŋ/	adj. 惊人的
-176	website	/ˈwebsaɪt/	n. 网站
-177	feed	/fiːd/	v. 喂养
-178	herd	/hɜːd/	v. 放牧
-179	goat	/ɡəʊt/	n. 山羊
-180	milk	/mɪlk/	v. 挤奶
-181	remember	/rɪˈmembə(r)/	v. 记得
-182	pigsty	/ˈpɪɡstaɪ/	n. 猪圈
-183	collect	/kəˈlekt/	v. 收集
-184	recognise	/ˈrekəɡnaɪz/	v. 认出
-185	care	/keə(r)/	n. 照顾
-186	keeper	/ˈkiːpə(r)/	n. 饲养员
-187	prefer	/prɪˈfɜː(r)/	v. 更喜欢
-188	sign	/saɪn/	n. 标志
-189	bite	/baɪt/	v. 咬
-190	pet	/pet/	v. 抚摸
-191	warning	/ˈwɔːnɪŋ/	n. 警告
-192	peck	/pek/	v. 啄
-193	sweet	/swiːt/	adj. 甜的
-194	calf	/kɑːf/	n. 小牛
-195	loud	/laʊd/	adj. 大声的
-196	noise	/nɔɪz/	n. 噪音
-197	meaning	/ˈmiːnɪŋ/	n. 意义
-198	shout	/ʃaʊt/	v. 喊叫
-199	jacket	/ˈdʒækɪt/	n. 夹克
-200	if	/ɪf/	conj. 如果
-201	snack	/snæk/	n. 零食
-202	could	/kʊd/	modal v. 可以
-203	hen	/hen/	n. 母鸡
-204	diary	/ˈdaɪəri/	n. 日记
-205	cookie	/ˈkʊki/	n. 曲奇
-206	direct	/də'rekt/	v. 指导
-207	yard	/jɑːd/	n. 院子
-208	glad	/ɡlæd/	adj. 高兴的
-209	believe	/bɪˈliːv/	v. 相信
-210	unforgettable	/ˌʌnfəˈɡetəbl/	adj. 难忘的
-211	smooth	/smuːð/	adj. 光滑的
-212	neck	/nek/	n. 脖子
-213	friendly	/ˈfrendli/	adj. 友好的
-214	ride	/raɪd/	v. 骑
-215	around	/əˈraʊnd/	prep. 周围
-216	vacation	/vəˈkeɪʃn/	n. 假期
-217	trip	/trɪp/	n. 旅行
-218	popular	/ˈpɒpjələ(r)/	adj. 流行的
-219	tour	/tʊə(r)/	n. 旅游
-220	tip	/tɪp/	n. 提示
-221	footprint	/ˈfʊtprɪnt/	n. 脚印
-222	hike	/haɪk/	v. 徒步
-223	nature	/ˈneɪtʃə(r)/	n. 自然
-224	enjoy	/ɪnˈdʒɔɪ/	v. 享受
-225	local	/ˈləʊkl/	adj. 当地的
-226	lazy	/ˈleɪzi/	adj. 懒惰的
-227	horseback	/ˈhɔːsbæk/	n. 马背
-228	roof	/ruːf/	n. 屋顶
-229	ski	/skiː/	v. 滑雪
-230	reason	/ˈriːzn/	n. 原因
-231	book	/bʊk/	v. 预订
-232	drive	/draɪv/	v. 驾驶
-233	shall	/ʃæl/	modal v. 将
-234	afraid	/əˈfreɪd/	adj. 害怕
-235	expensive	/ɪkˈspensɪv/	adj. 昂贵的
-236	price	/praɪs/	n. 价格
-237	ticket	/ˈtɪkɪt/	n. 票
-238	better	/ˈbetə(r)/	adj. 更好的
-239	convenient	/kənˈviːniənt/	adj. 方便的
-240	speed	/spiːd/	n. 速度
-241	comfortable	/ˈkʌmftəbl/	adj. 舒适的
-242	view	/vjuː/	n. 风景
-243	carry	/ˈkæri/	v. 携带
-244	plan	/plæn/	n. 计划
-245	own	/əʊn/	adj. 自己的
-246	historical	/hɪˈstɒrɪkl/	adj. 历史的
-247	such	/sʌtʃ/	det. 这样的
-248	palace	/ˈpæləs/	n. 宫殿
-249	museum	/mjuˈziːəm/	n. 博物馆
-250	national	/ˈnæʃnəl/	adj. 国家的
-251	forest	/ˈfɒrɪst/	n. 森林
-252	mountain	/ˈmaʊntən/	n. 山
-253	postcard	/ˈpəʊstkɑːd/	n. 明信片
-254	volunteer	/ˌvɒlənˈtɪə(r)/	n. 志愿者
-255	teahouse	/ˈtiːhaʊs/	n. 茶馆
-256	opera	/ˈɒprə/	n. 歌剧
-257	myself	/maɪˈself/	pron. 我自己`;
+19	excuse	/ɪkˈskjuːz/	v. 原谅；宽恕
+20	excuse me	/ɪk'skjuːz miː/	对不起；劳驾
+21	of course	/ɒv kɔːs/	当然
+22	project	/ˈprɒdʒekt/	n. 项目
+23	start	/stɑːt/	v. 开始
+24	topic	/ˈtɒpɪk/	n. 话题；主题
+25	online	/ˌɒnˈlaɪn/	adv. 在线；adj. 在线的
+26	receive	/rɪˈsiːv/	v. 接到；收到
+27	reply	/rɪˈplaɪ/	n. 回答；答复
+28	group	/ɡruːp/	n. 组；群
+29	most	/məʊst/	adv. 最
+30	a.m.	/ˌeɪ ˈem/	abbr. 上午
+31	end	/end/	v. 结束
+32	p.m.	/ˌpiː ˈem/	abbr. 下午
+33	difference	/ˈdɪfrəns/	n. 差别
+34	same	/seɪm/	adj. 一样的
+35	during	/ˈdjʊərɪŋ/	prep. 在……期间
+36	outside	/ˌaʊtˈsaɪd/	adv. 在外面
+37	noon	/nuːn/	n. 正午；中午
+38	connect	/kəˈnekt/	v. 连接
+39	comment	/ˈkɒment/	n. 议论；评论
+40	tie	/taɪ/	n. 联系；关系
+41	relation	/rɪˈleɪʃn/	n. 关系；联系
+42	introduce	/ˌɪntrəˈdjuːs/	v. 介绍
+43	classmate	/ˈklɑːsmeɪt/	n. 同班同学
+44	relative	/ˈrelətɪv/	n. 亲戚
+45	only	/ˈəʊnli/	adj. 仅有的
+46	only child	/ˌəʊnli ˈtʃaɪld /	独生子
+47	twin	/twɪn/	n. 双胞胎之一
+48	husband	/ˈhʌzbənd/	n. 丈夫
+49	wife	/waɪf/	n. 妻子
+50	son	/sʌn/	n. 儿子
+51	daughter	/ˈdɔːtə(r)/	n. 女儿
+52	other	/ˈʌðə(r)/	adj. 另外；其他
+53	member	/ˈmembə(r)/	n. 成员
+54	add	/æd/	v. 添加
+55	note	/nəʊt/	n. 笔记；记录
+56	album	/ˈælbəm/	n. 相册
+57	teach	/tiːtʃ/	v. 教
+58	homework	/ˈhəʊmwɜːk/	n. 家庭作业
+59	guitar	/ɡɪˈtɑː(r)/	n. 吉他
+60	elder	/ˈeldə(r)/	adj. 年长的
+61	sofa	/ˈsəʊfə/	n. 长沙发
+62	round	/raʊnd/	adj. 圆形的
+63	dark	/dɑːk/	adj. 乌黑的
+64	chess	/tʃes/	n. 国际象棋
+65	duty	/ˈdjuːti/	n. 责任
+66	born	/bɔːn/	v. 出生
+67	weekend	/ˌwiːkˈend/	n. 周末
+68	thing	/θɪŋ/	n. 事情
+69	enough	/ɪˈnʌf/	adv. 足够地
+70	Well done!	/ˌwel ˈdʌn/	做得好！
+71	dish	/dɪʃ/	n. 碟子；一道菜
+72	usually	/ˈjuːʒuəli/	adv. 通常地
+73	quick	/kwɪk/	adj. 快的
+74	together	/təˈɡeðə(r)/	adv. 在一起
+75	flat	/flæt/	n. 公寓
+76	fun	/fʌn/	n. 乐趣
+77	celebration	/ˌselɪˈbreɪʃn/	n. 庆典
+78	prepare	/prɪˈpeə(r)/	v. 准备
+79	decorate	/ˈdekəreɪt/	v. 装饰
+80	living room	/'lɪvɪŋ ruːm/	n. 客厅
+81	balloon	/bəˈluːn/	n. 气球
+82	set	/set/	v. 放置
+83	surprised	/səˈpraɪzd/	adj. 惊奇的
+84	super-excited	/ˌsuːpə(r) ɪkˈsaɪtɪd/	adj. 超级激动的
+85	joy	/dʒɔɪ/	n. 高兴
+86	jump for joy	/dʒʌmp fɔː(r) dʒɔɪ/	欢呼雀跃
+87	something	/ˈsʌmθɪŋ/	pron. 某事
+88	beef	/biːf/	n. 牛肉
+89	tofu	/ˈtəʊfuː/	n. 豆腐
+90	pepper	/ˈpepə(r)/	n. 甜椒
+91	cabbage	/ˈkæbɪdʒ/	n. 卷心菜
+92	onion	/ˈʌnjən/	n. 洋葱
+93	carrot	/ˈkærət/	n. 胡萝卜
+94	watermelon	/ˈwɔːtəmelən/	n. 西瓜
+95	cucumber	/ˈkjuːkʌmbə(r)/	n. 黄瓜
+96	strawberry	/ˈstrɔːbəri/	n. 草莓
+97	pear	/peə(r)/	n. 梨
+98	yogurt	/ˈjɒɡət/	n. 酸奶
+99	cheese	/tʃiːz/	n. 奶酪
+100	corn	/kɔːn/	n. 玉米
+101	oil	/ɔɪl/	n. 食用油
+102	salt	/sɔːlt/	n. 盐
+103	bean	/biːn/	n. 豆
+104	product	/ˈprɒdʌkt/	n. 产品
+105	grain	/ɡreɪn/	n. 谷物
+106	rainbow	/ˈreɪnbəʊ/	n. 彩虹
+107	balanced	/ˈbælənst/	adj. 平衡的
+108	diet	/ˈdaɪət/	n. 日常饮食
+109	each	/iːtʃ/	det. & pron. 每个
+110	plenty	/ˈplenti/	pron. 大量
+111	plenty of	/ˈplenti ɒv/	大量的
+112	choice	/tʃɔɪs/	n. 选择
+113	list	/lɪst/	n. 清单
+114	few	/fjuː/	det. & adj. 很少
+115	a few	/ə fjuː/	有些；几个
+116	pleasure	/ˈpleʒə(r)/	n. 高兴
+117	ingredient	/ɪnˈɡriːdiənt/	n. 材料；成分
+118	tasty	/ˈteɪsti/	adj. 美味的
+119	need	/niːd/	v. 需要
+120	fridge	/frɪdʒ/	n. 冰箱
+121	surprise	/səˈpraɪz/	n. 惊喜
+122	blog	/blɒɡ/	n. 博客
+123	as	/æz; əz/	prep. 作为
+124	soy sauce	/ˌsɔɪ ˈsɔːs/	n. 酱油
+125	into	/ˈɪntuː;ˈɪntə/	prep. 进入
+126	piece	/piːs/	n. 碎片
+127	fry	/fraɪ/	v. 油炒
+128	finally	/ˈfaɪnəli/	adv. 最后
+129	boil	/bɔɪl/	v. 煮沸
+130	side	/saɪd/	n. 侧面
+131	side dish	/ˈsaɪd dɪʃ/	配菜
+132	mutton	/ˈmʌtn/	n. 羊肉
+133	recipe	/ˈresəpi/	n. 食谱
+134	beat	/biːt/	v. 搅拌；打
+135	chopsticks	/ˈtʃɒpstɪks/	n. 筷子
+136	bowl	/bəʊl/	n. 碗
+137	menu	/ˈmenjuː/	n. 菜单
+138	date	/deɪt/	n. 日期
+139	sports ground	/spɔːts ɡraʊnd/	运动场
+140	gym	/dʒɪm/	n. 体育馆
+141	team	/tiːm/	n. 队
+142	high	/haɪ/	adj. 高的
+143	rope	/rəʊp/	n. 绳
+144	kick	/kɪk/	v. 踢
+145	rock	/rɒk/	n. 岩石
+146	climb	/klaɪm/	v. 攀登
+147	rock climbing	/ˈrɒk klaɪmɪŋ/	攀岩
+148	kung fu	/ˌkʌŋ 'fuː/	n. 功夫
+149	Frisbee	/ˈfrɪzbi/	n. 飞盘
+150	active	/ˈæktɪv/	adj. 活跃的
+151	part	/pɑːt/	n. 部分
+152	take part in	/teɪk pɑːt ɪn/	参加
+153	baseball	/ˈbeɪsbɔːl/	n. 棒球
+154	volleyball	/ˈvɒlibɔːl/	n. 排球
+155	badminton	/ˈbædmɪntən/	n. 羽毛球
+156	tennis	/ˈtenɪs/	n. 网球
+157	pull	/pʊl/	v. 拉；拔
+158	safety	/ˈseɪfti/	n. 安全
+159	ankle	/ˈæŋkl/	n. 踝
+160	match	/mætʃ/	n. 比赛
+161	gear	/ɡɪə(r)/	n. 装备
+162	example	/ɪɡˈzɑːmpl/	n. 例子
+163	for example	/fɔ: iɡˈzɑ:mpl/	例如
+164	warm up	/ˈwɔːm ʌp/	热身
+165	warm-up	/ˈwɔːm ʌp/	n. 热身
+166	watch out	/wɒtʃ aʊt/	小心
+167	matter	/ˈmætə(r)/	n. 问题
+168	What's the matter?	/wɒts ðə ˈmætə(r)/	怎么了？
+169	happen	/ˈhæpən/	v. 发生
+170	just	/dʒʌst/	adv. 只是
+171	fall	/fɔːl/	v. 跌倒
+172	guess	/ɡes/	v. 猜测
+173	cut	/kʌt/	n. 伤口
+174	knee	/niː/	n. 膝盖
+175	How come?	/haʊ kʌm/	怎么回事？
+176	seem	/siːm/	v. 似乎
+177	problem	/ˈprɒbləm/	n. 问题
+178	score	/skɔː(r)/	v. 得分
+179	goal	/ɡəʊl/	n. 进球
+180	goalkeeper	/ˈɡəʊlkiːpə(r)/	n. 守门员
+181	hold	/həʊld/	v. 抓住
+182	throw	/θrəʊ/	v. 投
+183	point	/pɔɪnt/	n. 得分
+184	control	/kənˈtrəʊl/	v. 控制
+185	mind	/maɪnd/	n. 头脑
+186	powerful	/ˈpaʊəfl/	adj. 强有力的
+187	style	/staɪl/	n. 风格
+188	moment	/ˈməʊmənt/	n. 片刻
+189	report	/rɪˈpɔːt/	v. 报告
+190	newspaper	/ˈnjuːzpeɪpə(r)/	n. 报纸
+191	court	/kɔːt/	n. 球场
+192	against	/əˈɡenst/	prep. 反对
+193	shoot	/ʃuːt/	v. 射门
+194	basket	/ˈbɑːskɪt/	n. 篮
+195	tie	/taɪ/	v. 平局
+196	bravo	/ˌbrɑːˈvəʊ/	excl. 好哇
+197	track	/træk/	n. 跑道
+198	amazing	/əˈmeɪzɪŋ/	adj. 惊人的
+199	website	/ˈwebsaɪt/	n. 网站
+200	feed	/fiːd/	v. 喂养
+201	herd	/hɜːd/	v. 放牧
+202	goat	/ɡəʊt/	n. 山羊
+203	milk	/mɪlk/	v. 挤奶
+204	remember	/rɪˈmembə(r)/	v. 记得
+205	pigsty	/ˈpɪɡstaɪ/	n. 猪圈
+206	collect	/kəˈlekt/	v. 收集
+207	recognise	/ˈrekəɡnaɪz/	v. 认出
+208	care	/keə(r)/	n. 照顾
+209	take care of	/teɪk keə(r) ɒv/	照顾
+210	keeper	/ˈkiːpə(r)/	n. 饲养员
+211	prefer	/prɪˈfɜː(r)/	v. 更喜欢
+212	get along with	/ɡet əˈlɒŋ wɪð/	和睦相处
+213	sign	/saɪn/	n. 标志
+214	bite	/baɪt/	v. 咬
+215	pet	/pet/	v. 抚摸
+216	warning	/ˈwɔːnɪŋ/	n. 警告
+217	peck	/pek/	v. 啄
+218	sweet	/swiːt/	adj. 甜的
+219	calf	/kɑːf/	n. 小牛
+220	loud	/laʊd/	adj. 大声的
+221	noise	/nɔɪz/	n. 噪音
+222	meaning	/ˈmiːnɪŋ/	n. 意义
+223	shh	/ʃ/	excl. 嘘
+224	shout	/ʃaʊt/	v. 喊叫
+225	jacket	/ˈdʒækɪt/	n. 夹克
+226	if	/ɪf/	conj. 如果
+227	snack	/snæk/	n. 零食
+228	could	/kʊd; kəd/	modal v. 可以
+229	hen	/hen/	n. 母鸡
+230	diary	/ˈdaɪəri/	n. 日记
+231	cookie	/ˈkʊki/	n. 曲奇
+232	direct	/də'rekt/	v. 指导
+233	yard	/jɑːd/	n. 院子
+234	glad	/ɡlæd/	adj. 高兴
+235	believe	/bɪˈliːv/	v. 相信
+236	unforgettable	/ˌʌnfəˈɡetəbl/	adj. 难忘的
+237	smooth	/smuːð/	adj. 光滑的
+238	neck	/nek/	n. 脖子
+239	friendly	/ˈfrendli/	adj. 友好的
+240	ride	/raɪd/	v. 骑
+241	around	/əˈraʊnd/	prep. 周围
+242	vacation	/vəˈkeɪʃn/	n. 假期
+243	trip	/trɪp/	n. 旅行
+244	popular	/ˈpɒpjələ(r)/	adj. 流行的
+245	tour	/tʊə(r)/	n. 旅游
+246	tip	/tɪp/	n. 提示
+247	footprint	/ˈfʊtprɪnt/	n. 脚印
+248	hike	/haɪk/	v. 徒步
+249	nature	/ˈneɪtʃə(r)/	n. 自然
+250	enjoy	/ɪnˈdʒɔɪ/	v. 享受
+251	local	/ˈləʊkl/	adj. 当地的
+252	lazy	/ˈleɪzi/	adj. 懒惰的
+253	horseback	/ˈhɔːsbæk/	n. 马背
+254	roof	/ruːf/	n. 屋顶
+255	ski	/skiː/	v. 滑雪
+256	reason	/ˈriːzn/	n. 原因
+257	book	/bʊk/	v. 预订
+258	drive	/draɪv/	v. 驾驶
+259	shall	/ʃæl; ʃəl/	modal v. 将
+260	afraid	/əˈfreɪd/	adj. 害怕
+261	expensive	/ɪkˈspensɪv/	adj. 昂贵的
+262	price	/praɪs/	n. 价格
+263	one-way	/ˌwʌn ˈweɪ/	adj. 单程的
+264	ticket	/ˈtɪkɪt/	n. 票
+265	better	/ˈbetə(r)/	adj. 更好的
+266	convenient	/kənˈviːniənt/	adj. 方便的
+267	speed	/spiːd/	n. 速度
+268	high-speed	/ˌhaɪ ˈspiːd/	adj. 高速的
+269	comfortable	/ˈkʌmftəbl/	adj. 舒适的
+270	view	/vjuː/	n. 风景
+271	carry	/ˈkæri/	v. 携带
+272	plan	/plæn/	n. 计划
+273	own	/əʊn/	adj. 自己的
+274	historical	/hɪˈstɒrɪkl/	adj. 历史的
+275	such	/sʌtʃ/	det. 这样的
+276	such as	/sʌtʃ æz/	例如
+277	palace	/ˈpæləs/	n. 宫殿
+278	museum	/mjuˈziːəm/	n. 博物馆
+279	national	/ˈnæʃnəl/	adj. 国家的
+280	forest	/ˈfɒrɪst/	n. 森林
+281	mountain	/ˈmaʊntən/	n. 山
+282	postcard	/ˈpəʊstkɑːd/	n. 明信片
+283	volunteer	/ˌvɒlənˈtɪə(r)/	n. 志愿者
+284	teahouse	/ˈtiːhaʊs/	n. 茶馆
+285	opera	/ˈɒprə/	n. 歌剧
+286	myself	/maɪˈself/	pron. 我自己
+287	enjoy oneself	/ɪnˈdʒɔɪ wʌnˈself/	过得快乐`;
 
-    // 六年级下册 (Volume 2)
-    const rawVol2 = `1	different	/ˈdɪfrənt/	adj. 不同的
+    // 六年级下册 (274词)
+    const rawVol6_2 = `1	different	/ˈdɪfrənt/	adj. 不同的
 2	notice	/ˈnəʊtɪs/	v. 注意
 3	swan	/swɒn/	n. 天鹅
 4	partner	/ˈpɑːtnə(r)/	n. 搭档
@@ -492,7 +1080,7 @@
 13	skin	/skɪn/	n. 皮肤
 14	special	/'speʃl/	adj. 特殊的
 15	number	/ˈnʌmbə(r)/	n. 数字
-16	than	/ðæn/	prep. 比
+16	than	/ðæn; ðən/	prep. 比
 17	fair	/feə(r)/	adj. 白皙的
 18	talent	/ˈtælənt/	n. 天赋
 19	programme	/ˈprəʊɡræm/	n. 节目
@@ -500,7 +1088,7 @@
 21	butterfly	/ˈbʌtəflaɪ/	n. 蝴蝶
 22	violin	/ˌvaɪəˈlɪn/	n. 小提琴
 23	host	/həʊst/	n. 主持人
-24	sound	/saʊnd/	n. 声音
+24	sound	/saʊnd/	v. 听起来
 25	excite	/ɪkˈsaɪt/	v. 使兴奋
 26	exciting	/ɪkˈsaɪtɪŋ/	adj. 令人兴奋的
 27	anything	/ˈeniθɪŋ/	pron. 任何事
@@ -511,230 +1099,246 @@
 32	hobby	/ˈhɒbi/	n. 爱好
 33	personality	/ˌpɜːsəˈnæləti/	n. 个性
 34	ability	/əˈbɪləti/	n. 能力
-35	accept	/əkˈsept/	v. 接受
-36	peacock	/ˈpiːkɒk/	n. 孔雀
-37	wise	/waɪz/	adj. 明智的
-38	nightingale	/ˈnaɪtɪŋɡeɪl/	n. 夜莺
-39	without	/wɪˈðaʊt/	prep. 没有
-40	doubt	/daʊt/	n. 怀疑
-41	laugh	/lɑːf/	v. 笑
-42	smile	/smaɪl/	v. 微笑
-43	feather	/ˈfeðə(r)/	n. 羽毛
-44	colourful	/ˈkʌləfl/	adj. 多彩的
-45	future	/ˈfjuːtʃə(r)/	n. 未来
-46	pat	/pæt/	v. 轻拍
-47	skill	/skɪl/	n. 技巧
-48	unique	/juˈniːk/	adj. 独特的
-49	mean	/miːn/	v. 意味着
-50	noticeboard	/ˈnəʊtɪsbɔːd/	n. 布告栏
-51	would	/wʊd/	modal v. 将
-52	rule	/ruːl/	n. 规则
-53	underground	/ˈʌndəɡraʊnd/	n. 地铁
-54	lean	/liːn/	v. 倾斜
-55	litter	/ˈlɪtə(r)/	v. 乱扔
-56	gap	/ɡæp/	n. 缺口
-57	else	/els/	adv. 其他
-58	escalator	/ˈeskəleɪtə(r)/	n. 扶梯
-59	station	/ˈsteɪʃn/	n. 车站
-60	announcement	/əˈnaʊnsmənt/	n. 公告
-61	passenger	/ˈpæsɪndʒə(r)/	n. 乘客
-62	lift	/lɪft/	n. 电梯
-63	platform	/ˈplætfɔːm/	n. 站台
-64	line	/laɪn/	n. 线
-65	rush	/rʌʃ/	v. 冲
-66	smoke	/sməʊk/	v. 吸烟
-67	seat	/siːt/	n. 座位
-68	leave	/liːv/	v. 离开
-69	rubbish	/ˈrʌbɪʃ/	n. 垃圾
-70	glove	/ɡlʌv/	n. 手套
-71	broken	/ˈbrəʊkən/	adj. 破损的
-72	container	/kənˈteɪnə(r)/	n. 容器
-73	ready	/ˈredi/	adj. 准备好
-74	follow	/ˈfɒləʊ/	v. 跟随
-75	stay	/steɪ/	v. 停留
-76	grow	/ɡrəʊ/	v. 生长
-77	important	/ɪmˈpɔːtnt/	adj. 重要的
-78	hurrah	/həˈrɑː/	excl. 万岁
-79	model	/ˈmɒdl/	n. 模型
-80	pay	/peɪ/	v. 支付
-81	attention	/əˈtenʃn/	n. 注意
-82	dream	/driːm/	n. 梦想
-83	outing	/ˈaʊtɪŋ/	n. 远足
-84	gate	/ɡeɪt/	n. 大门
-85	festival	/ˈfestɪvl/	n. 节日
-86	across	/əˈkrɒs/	prep. 穿过
-87	culture	/ˈkʌltʃə(r)/	n. 文化
-88	luck	/lʌk/	n. 运气
-89	porridge	/ˈpɒrɪdʒ/	n. 粥
-90	lucky	/ˈlʌki/	adj. 幸运的
-91	click	/klɪk/	v. 点击
-92	eve	/iːv/	n. 前夜
-93	tradition	/trəˈdɪʃn/	n. 传统
-94	country	/ˈkʌntri/	n. 国家
-95	wealth	/welθ/	n. 财富
-96	hope	/həʊp/	v. 希望
-97	pass	/pɑːs/	v. 传递
-98	midnight	/ˈmɪdnaɪt/	n. 午夜
-99	international	/ˌɪntəˈnæʃnəl/	adj. 国际的
-100	event	/ɪˈvent/	n. 事件
-101	square	/skweə(r)/	n. 广场
-102	symphony	/ˈsɪmfəni/	n. 交响乐
-103	theatre	/ˈθɪətə(r)/	n. 剧院
-104	firework	/ˈfaɪəwɜːk/	n. 烟火
-105	concert	/ˈkɒnsət/	n. 音乐会
-106	prince	/prɪns/	n. 王子
-107	check	/tʃek/	v. 检查
-108	information	/ˌɪnfəˈmeɪʃn/	n. 信息
-109	since	/sɪns/	prep. 自从
-110	performance	/pəˈfɔːməns/	n. 表演
-111	really	/ˈriːəli/	adv. 真正地
-112	musical	/ˈmjuːzɪkl/	n. 音乐剧
-113	perform	/pəˈfɔːm/	v. 表演
-114	invite	/ɪnˈvaɪt/	v. 邀请
-115	celebrate	/ˈselɪbreɪt/	v. 庆祝
-116	calendar	/ˈkælɪndə(r)/	n. 日历
-117	reunion	/ˌriːˈjuːniən/	n. 团聚
-118	full	/fʊl/	adj. 满的
-119	post	/pəʊst/	v. 邮寄
-120	mostly	/ˈməʊstli/	adv. 主要
-121	tonight	/təˈnaɪt/	adv. 今晚
-122	harvest	/ˈhɑːvɪst/	n. 收获
-123	traditional	/trəˈdɪʃənl/	adj. 传统的
-124	nut	/nʌt/	n. 坚果
-125	sugar	/ˈʃʊɡə(r)/	n. 糖
-126	experience	/ɪkˈspɪəriəns/	n. 经验
-127	meal	/miːl/	n. 一餐
-128	count	/kaʊnt/	v. 数
-129	search	/sɜːtʃ/	v. 搜索
-130	airport	/ˈeəpɔːt/	n. 机场
-131	location	/ləʊˈkeɪʃn/	n. 位置
-132	capital	/ˈkæpɪtl/	n. 首都
-133	wet	/wet/	adj. 湿的
-134	foggy	/ˈfɒɡi/	adj. 有雾的
-135	north	/nɔːθ/	n. 北方
-136	quite	/kwaɪt/	adv. 相当
-137	temperature	/ˈtemprətʃə(r)/	n. 温度
-138	drop	/drɒp/	v. 下降
-139	degree	/dɪˈɡriː/	n. 度
-140	Celsius	/ˈselsiəs/	adj. 摄氏的
-141	dry	/draɪ/	adj. 干的
-142	south	/saʊθ/	n. 南方
-143	still	/stɪl/	adv. 仍然
-144	wind	/wɪnd/	n. 风
-145	cloud	/klaʊd/	n. 云
-146	fog	/fɒɡ/	n. 雾
-147	skate	/skeɪt/	v. 滑冰
-148	picnic	/ˈpɪknɪk/	n. 野餐
-149	sunshine	/ˈsʌnʃaɪn/	n. 阳光
-150	hate	/heɪt/	v. 讨厌
-151	extreme	/ɪkˈstriːm/	adj. 极端的
-152	news	/njuːz/	n. 新闻
-153	heat	/hiːt/	n. 热
-154	wave	/weɪv/	n. 浪
-155	heatwave	/ˈhiːtweɪv/	n. 热浪
-156	hit	/hɪt/	v. 击打
-157	several	/ˈsevrəl/	det. 几个
-158	break	/breɪk/	v. 打破
-159	record	/ˈrekɔːd/	n. 记录
-160	reach	/riːtʃ/	v. 达到
-161	area	/ˈeəriə/	n. 区域
-162	runway	/ˈrʌnweɪ/	n. 跑道
-163	action	/ˈækʃn/	n. 行动
-164	pupil	/ˈpjuːpl/	n. 小学生
-165	uniform	/ˈjuːnɪfɔːm/	n. 制服
-166	indoors	/ˌɪnˈdɔːz/	adv. 在室内
-167	leaf	/liːf/	n. 叶子
-168	fact	/fækt/	n. 事实
-169	average	/ˈævərɪdʒ/	adj. 平均的
-170	increase	/ɪnˈkriːs/	v. 增加
-171	coal	/kəʊl/	n. 煤
-172	cause	/kɔːz/	v. 引起
-173	worse	/wɜːs/	adj. 更糟
-174	soon	/suːn/	adv. 不久
-175	regards	/rɪˈɡɑːdz/	n. 问候
-176	neighbourhood	/ˈneɪbəhʊd/	n. 街区
-177	build	/bɪld/	v. 建造
-178	reduce	/rɪˈdjuːs/	v. 减少
-179	reuse	/ˌriːˈjuːz/	v. 重复使用
-180	recycle	/ˌriːˈsaɪkl/	v. 回收
-181	bottle	/ˈbɒtl/	n. 瓶子
-182	repair	/rɪˈpeə(r)/	v. 修理
-183	item	/ˈaɪtəm/	n. 物品
-184	sort	/sɔːt/	v. 分类
-185	cloth	/klɒθ/	n. 布
-186	pick	/pɪk/	v. 捡
-187	plastic	/ˈplæstɪk/	n. 塑料
-188	waste	/weɪst/	n. 浪费
-189	electricity	/ɪˌlekˈtrɪsəti/	n. 电
-190	tap	/tæp/	n. 水龙头
-191	brush	/brʌʃ/	v. 刷
-192	tooth	/tuːθ/	n. 牙齿
-193	bin	/bɪn/	n. 垃圾桶
-194	save	/seɪv/	v. 节省
-195	mix	/mɪks/	v. 混合
-196	reusable	/ˌriːˈjuːzəbl/	adj. 可重用的
-197	store	/stɔː(r)/	n. 商店
-198	even	/ˈiːvn/	adv. 甚至
-199	huge	/hjuːdʒ/	adj. 巨大的
-200	government	/ˈɡʌvənmənt/	n. 政府
-201	encourage	/ɪnˈkʌrɪdʒ/	v. 鼓励
-202	public	/ˈpʌblɪk/	adj. 公共的
-203	transport	/ˈtrænspɔːt/	n. 交通
-204	environmental	/ɪnˌvaɪrənˈmentl/	adj. 环境的
-205	electric	/ɪˈlektrɪk/	adj. 电动的
-206	building	/ˈbɪldɪŋ/	n. 建筑
-207	low	/ləʊ/	adj. 低的
-208	energy	/ˈenədʒi/	n. 能源
-209	however	/haʊˈevə(r)/	adv. 然而
-210	alone	/əˈləʊn/	adv. 独自
-211	planet	/ˈplænɪt/	n. 行星
-212	mankind	/mænˈkaɪnd/	n. 人类
-213	daily	/ˈdeɪli/	adj. 日常的
-214	changer	/ˈtʃeɪndʒə(r)/	n. 改变者
-215	scientist	/ˈsaɪəntɪst/	n. 科学家
-216	change	/tʃeɪndʒ/	n. 变化
-217	publish	/ˈpʌblɪʃ/	v. 出版
-218	theory	/ˈθɪəri/	n. 理论
-219	invent	/ɪnˈvent/	v. 发明
-220	inexpensive	/ˌɪnɪkˈspensɪv/	adj. 便宜的
-221	bulb	/bʌlb/	n. 灯泡
-222	discover	/dɪˈskʌvə(r)/	v. 发现
-223	general	/ˈdʒenrəl/	adj. 普遍的
-224	smart	/smɑːt/	adj. 聪明的
-225	inventor	/ɪnˈventə(r)/	n. 发明家
-226	real	/ˈriːəl/	adj. 真实的
-227	power	/ˈpaʊə(r)/	n. 力量
-228	die	/daɪ/	v. 死
-229	successful	/səkˈsesfl/	adj. 成功的
-230	invention	/ɪnˈvenʃn/	n. 发明
-231	saver	/ˈseɪvə(r)/	n. 救星
-232	medicine	/ˈmedsn/	n. 药
-233	spend	/spend/	v. 花费
-234	sick	/sɪk/	adj. 生病的
-235	soldier	/ˈsəʊldʒə(r)/	n. 士兵
-236	lose	/luːz/	v. 丢失
-237	admire	/ədˈmaɪə(r)/	v. 钦佩
-238	herb	/hɜːb/	n. 草药
-239	pardon	/ˈpɑːdn/	excl. 原谅
-240	pain	/peɪn/	n. 痛苦
-241	beg	/beɡ/	v. 乞求
-242	storyteller	/ˈstɔːritelə(r)/	n. 说书人
-243	poem	/ˈpəʊɪm/	n. 诗
-244	act	/ækt/	v. 行动
-245	poor	/pɔː(r)/	adj. 穷的
-246	tragedy	/ˈtrædʒədi/	n. 悲剧
-247	create	/kriˈeɪt/	v. 创造
-248	character	/ˈkærəktə(r)/	n. 角色
-249	stage	/steɪdʒ/	n. 舞台
-250	million	/ˈmɪljən/	num. 百万
-251	mark	/mɑːk/	n. 标记
-252	level	/ˈlevl/	n. 水平
-253	until	/ənˈtɪl/	conj. 直到
-254	weigh	/weɪ/	v. 称重
-255	weight	/weɪt/	n. 重量
-256	stamp	/stæmp/	n. 邮票`;
-
-    // --- 核心逻辑 ---
+35	easy-going	/ˌiːzi ˈɡəʊɪŋ/	adj. 随和的
+36	accept	/əkˈsept/	v. 接受
+37	peacock	/ˈpiːkɒk/	n. 孔雀
+38	wise	/waɪz/	adj. 明智的
+39	nightingale	/ˈnaɪtɪŋɡeɪl/	n. 夜莺
+40	without	/wɪˈðaʊt/	prep. 没有
+41	doubt	/daʊt/	n. 怀疑
+42	laugh	/lɑːf/	v. 笑
+43	laugh at		嘲笑
+44	smile	/smaɪl/	v. 微笑
+45	feather	/ˈfeðə(r)/	n. 羽毛
+46	colourful	/ˈkʌləfl/	adj. 多彩的
+47	future	/ˈfjuːtʃə(r)/	n. 未来
+48	pat	/pæt/	v. 轻拍
+49	skill	/skɪl/	n. 技巧
+50	unique	/juˈniːk/	adj. 独特的
+51	mean	/miːn/	v. 意味着
+52	noticeboard	/ˈnəʊtɪsbɔːd/	n. 布告栏
+53	would	/wʊd/	modal v. 将
+54	rule	/ruːl/	n. 规则
+55	underground	/ˈʌndəɡraʊnd/	n. 地铁
+56	lean	/liːn/	v. 倾斜
+57	litter	/ˈlɪtə(r)/	v. 乱扔
+58	gap	/ɡæp/	n. 缺口
+59	else	/els/	adv. 其他
+60	escalator	/ˈeskəleɪtə(r)/	n. 扶梯
+61	station	/ˈsteɪʃn/	n. 车站
+62	announcement	/əˈnaʊnsmənt/	n. 公告
+63	passenger	/ˈpæsɪndʒə(r)/	n. 乘客
+64	lift	/lɪft/	n. 电梯
+65	platform	/ˈplætfɔːm/	n. 站台
+66	line	/laɪn/	n. 线
+67	rush	/rʌʃ/	v. 冲
+68	smoke	/sməʊk/	v. 吸烟
+69	seat	/siːt/	n. 座位
+70	anyone	/ˈeniwʌn/	pron. 任何人
+71	leave	/liːv/	v. 离开
+72	rubbish	/ˈrʌbɪʃ/	n. 垃圾
+73	glove	/ɡlʌv/	n. 手套
+74	broken	/ˈbrəʊkən/	adj. 破损的
+75	container	/kənˈteɪnə(r)/	n. 容器
+76	ready	/ˈredi/	adj. 准备好
+77	follow	/ˈfɒləʊ/	v. 跟随
+78	stay	/steɪ/	v. 停留
+79	grow	/ɡrəʊ/	v. 生长
+80	important	/ɪmˈpɔːtnt/	adj. 重要的
+81	take turns		轮流
+82	hurrah	/həˈrɑː/	excl. 万岁
+83	model	/ˈmɒdl/	n. 模型
+84	pay	/peɪ/	v. 支付
+85	attention	/əˈtenʃn/	n. 注意
+86	pay attention to		注意
+87	dream	/driːm/	n. 梦想
+88	outing	/ˈaʊtɪŋ/	n. 远足
+89	gate	/ɡeɪt/	n. 大门
+90	festival	/ˈfestɪvl/	n. 节日
+91	across	/əˈkrɒs/	prep. 穿过
+92	culture	/ˈkʌltʃə(r)/	n. 文化
+93	luck	/lʌk/	n. 运气
+94	spring roll	/ˌsprɪŋ ˈrəʊl/	n. 春卷
+95	porridge	/ˈpɒrɪdʒ/	n. 粥
+96	lucky	/ˈlʌki/	adj. 幸运的
+97	click	/klɪk/	v. 点击
+98	eve	/iːv/	n. 前夜
+99	tradition	/trəˈdɪʃn/	n. 传统
+100	country	/ˈkʌntri/	n. 国家
+101	wealth	/welθ/	n. 财富
+102	hope	/həʊp/	v. 希望
+103	pass	/pɑːs/	v. 传递
+104	pass on		传递
+105	midnight	/ˈmɪdnaɪt/	n. 午夜
+106	international	/ˌɪntəˈnæʃnəl/	adj. 国际的
+107	event	/ɪˈvent/	n. 事件
+108	square	/skweə(r)/	n. 广场
+109	symphony	/ˈsɪmfəni/	n. 交响乐
+110	theatre	/ˈθɪətə(r)/	n. 剧院
+111	firework	/ˈfaɪəwɜːk/	n. 烟火
+112	concert	/ˈkɒnsət/	n. 音乐会
+113	prince	/prɪns/	n. 王子
+114	check	/tʃek/	v. 检查
+115	check out		察看
+116	information	/ˌɪnfəˈmeɪʃn/	n. 信息
+117	since	/sɪns/	prep. 自从
+118	performance	/pəˈfɔːməns/	n. 表演
+119	really	/ˈriːəli/	adv. 真正地
+120	musical	/ˈmjuːzɪkl/	n. 音乐剧
+121	perform	/pəˈfɔːm/	v. 表演
+122	invite	/ɪnˈvaɪt/	v. 邀请
+123	celebrate	/ˈselɪbreɪt/	v. 庆祝
+124	calendar	/ˈkælɪndə(r)/	n. 日历
+125	lunar calendar		农历
+126	reunion	/ˌriːˈjuːniən/	n. 团聚
+127	full	/fʊl/	adj. 满的
+128	post	/pəʊst/	v. 邮寄
+129	mostly	/ˈməʊstli/	adv. 主要
+130	tonight	/təˈnaɪt/	adv. 今晚
+131	harvest	/ˈhɑːvɪst/	n. 收获
+132	traditional	/trəˈdɪʃənl/	adj. 传统的
+133	nut	/nʌt/	n. 坚果
+134	sugar	/ˈʃʊɡə(r)/	n. 糖
+135	experience	/ɪkˈspɪəriəns/	n. 经验
+136	meal	/miːl/	n. 一餐
+137	count	/kaʊnt/	v. 数
+138	search	/sɜːtʃ/	v. 搜索
+139	airport	/ˈeəpɔːt/	n. 机场
+140	location	/ləʊˈkeɪʃn/	n. 位置
+141	capital	/ˈkæpɪtl/	n. 首都
+142	wet	/wet/	adj. 湿的
+143	foggy	/ˈfɒɡi/	adj. 有雾的
+144	north	/nɔːθ/	n. 北方
+145	quite	/kwaɪt/	adv. 相当
+146	temperature	/ˈtemprətʃə(r)/	n. 温度
+147	drop	/drɒp/	v. 下降
+148	degree	/dɪˈɡriː/	n. 度
+149	Celsius	/ˈselsiəs/	adj. 摄氏的
+150	dry	/draɪ/	adj. 干的
+151	south	/saʊθ/	n. 南方
+152	still	/stɪl/	adv. 仍然
+153	wind	/wɪnd/	n. 风
+154	cloud	/klaʊd/	n. 云
+155	fog	/fɒɡ/	n. 雾
+156	skate	/skeɪt/	v. 滑冰
+157	picnic	/ˈpɪknɪk/	n. 野餐
+158	sunshine	/ˈsʌnʃaɪn/	n. 阳光
+159	hate	/heɪt/	v. 讨厌
+160	extreme	/ɪkˈstriːm/	adj. 极端的
+161	news	/njuːz/	n. 新闻
+162	heat	/hiːt/	n. 热
+163	wave	/weɪv/	n. 浪
+164	heatwave	/ˈhiːtweɪv/	n. 热浪
+165	hit	/hɪt/	v. 击打
+166	several	/ˈsevrəl/	det. 几个
+167	break	/breɪk/	v. 打破
+168	record	/ˈrekɔːd/	n. 记录
+169	reach	/riːtʃ/	v. 达到
+170	break out		爆发
+171	area	/ˈeəriə/	n. 区域
+172	runway	/ˈrʌnweɪ/	n. 跑道
+173	action	/ˈækʃn/	n. 行动
+174	pupil	/ˈpjuːpl/	n. 小学生
+175	uniform	/ˈjuːnɪfɔːm/	n. 制服
+176	indoors	/ˌɪnˈdɔːz/	adv. 在室内
+177	leaf	/liːf/	n. 叶子
+178	fact	/fækt/	n. 事实
+179	in fact		事实上
+180	average	/ˈævərɪdʒ/	adj. 平均的
+181	increase	/ɪnˈkriːs/	v. 增加
+182	coal	/kəʊl/	n. 煤
+183	cause	/kɔːz/	v. 引起
+184	worse	/wɜːs/	adj. 更糟
+185	soon	/suːn/	adv. 不久
+186	regards	/rɪˈɡɑːdz/	n. 问候
+187	neighbourhood	/ˈneɪbəhʊd/	n. 街区
+188	build	/bɪld/	v. 建造
+189	reduce	/rɪˈdjuːs/	v. 减少
+190	reuse	/ˌriːˈjuːz/	v. 重复使用
+191	recycle	/ˌriːˈsaɪkl/	v. 回收
+192	bottle	/ˈbɒtl/	n. 瓶子
+193	repair	/rɪˈpeə(r)/	v. 修理
+194	item	/ˈaɪtəm/	n. 物品
+195	sort	/sɔːt/	v. 分类
+196	cloth	/klɒθ/	n. 布
+197	pick	/pɪk/	v. 捡
+198	pick up		捡起
+199	plastic	/ˈplæstɪk/	n. 塑料
+200	waste	/weɪst/	n. 浪费
+201	electricity	/ɪˌlekˈtrɪsəti/	n. 电
+202	tap	/tæp/	n. 水龙头
+203	brush	/brʌʃ/	v. 刷
+204	tooth	/tuːθ/	n. 牙齿
+205	bin	/bɪn/	n. 垃圾桶
+206	save	/seɪv/	v. 节省
+207	mix	/mɪks/	v. 混合
+208	reusable	/ˌriːˈjuːzəbl/	adj. 可重用的
+209	store	/stɔː(r)/	n. 商店
+210	even	/ˈiːvn/	adv. 甚至
+211	huge	/hjuːdʒ/	adj. 巨大的
+212	government	/ˈɡʌvənmənt/	n. 政府
+213	encourage	/ɪnˈkʌrɪdʒ/	v. 鼓励
+214	public	/ˈpʌblɪk/	adj. 公共的
+215	transport	/ˈtrænspɔːt/	n. 交通
+216	environmental	/ɪnˌvaɪrənˈmentl/	adj. 环境的
+217	electric	/ɪˈlektrɪk/	adj. 电动的
+218	building	/ˈbɪldɪŋ/	n. 建筑
+219	low	/ləʊ/	adj. 低的
+220	energy	/ˈenədʒi/	n. 能源
+221	low-energy	/ləʊ ˈenədʒi/	adj. 低能耗的
+222	however	/haʊˈevə(r)/	adv. 然而
+223	alone	/əˈləʊn/	adv. 独自
+224	planet	/ˈplænɪt/	n. 行星
+225	mankind	/mænˈkaɪnd/	n. 人类
+226	daily	/ˈdeɪli/	adj. 日常的
+227	changer	/ˈtʃeɪndʒə(r)/	n. 改变者
+228	scientist	/ˈsaɪəntɪst/	n. 科学家
+229	change	/tʃeɪndʒ/	v. 改变
+230	publish	/ˈpʌblɪʃ/	v. 出版
+231	theory	/ˈθɪəri/	n. 理论
+232	invent	/ɪnˈvent/	v. 发明
+233	inexpensive	/ˌɪnɪkˈspensɪv/	adj. 便宜的
+234	bulb	/bʌlb/	n. 灯泡
+235	discover	/dɪˈskʌvə(r)/	v. 发现
+236	general	/ˈdʒenrəl/	adj. 普遍的
+237	smart	/smɑːt/	adj. 聪明的
+238	inventor	/ɪnˈventə(r)/	n. 发明家
+239	real	/ˈriːəl/	adj. 真实的
+240	power	/ˈpaʊə(r)/	n. 力量
+241	power station		发电站
+242	die	/daɪ/	v. 死
+243	successful	/səkˈsesfl/	adj. 成功的
+244	invention	/ɪnˈvenʃn/	n. 发明
+245	saver	/ˈseɪvə(r)/	n. 救星
+246	medicine	/ˈmedsn/	n. 药
+247	Traditional Chinese Medicine		中药
+248	spend	/spend/	v. 花费
+249	sick	/sɪk/	adj. 生病的
+250	penicillin	/ˌpenɪˈsɪlɪn/	n. 青霉素
+251	soldier	/ˈsəʊldʒə(r)/	n. 士兵
+252	lose	/luːz/	v. 丢失
+253	admire	/ədˈmaɪə(r)/	v. 钦佩
+254	herb	/hɜːb/	n. 草药
+255	pardon	/ˈpɑːdn/	excl. 原谅
+256	pain	/peɪn/	n. 痛苦
+257	beg	/beɡ/	v. 乞求
+258	beg your pardon		请再说一遍
+259	storyteller	/ˈstɔːritelə(r)/	n. 说书人
+260	poem	/ˈpəʊɪm/	n. 诗
+261	act	/ækt/	v. 行动
+262	poor	/pɔː(r)/	adj. 穷的
+263	tragedy	/ˈtrædʒədi/	n. 悲剧
+264	create	/kriˈeɪt/	v. 创造
+265	character	/ˈkærəktə(r)/	n. 角色
+266	stage	/steɪdʒ/	n. 舞台
+267	million	/ˈmɪljən/	num. 百万
+268	millions of		数百万的
+269	mark	/mɑːk/	n. 标记
+270	level	/ˈlevl/	n. 水平
+271	until	/ənˈtɪl/	conj. 直到
+272	weigh	/weɪ/	v. 称重
+273	weight	/weɪt/	n. 重量
+274	stamp	/stæmp/	n. 邮票`;
 
     const MAX_SESSION = 10;
     let state = {
@@ -752,11 +1356,11 @@
     }
 
     const db = {
-        vol1: parseData(rawVol1),
-        vol2: parseData(rawVol2)
+        vol5: parseData(rawVol5),
+        vol6_1: parseData(rawVol6_1),
+        vol6_2: parseData(rawVol6_2)
     };
 
-    // 难度设置
     function setDiff(val) {
         state.diff = val;
         document.querySelectorAll('.diff-btn').forEach(b => {
@@ -764,28 +1368,23 @@
         });
     }
 
-    // 开始普通训练
     function startSession(key) {
         state.mode = 'normal';
         let pool = [...db[key]];
-        // 随机取10个
         state.bank = pool.sort(() => 0.5 - Math.random()).slice(0, MAX_SESSION);
         initGame();
     }
 
-    // 开始错题集训
     function startReviewSession() {
         if(globalWrongBank.length === 0) {
             alert("👏 太棒了！目前没有错题记录。");
             return;
         }
         state.mode = 'review';
-        // 错题本最多取20个进行一轮
         state.bank = [...globalWrongBank].sort(() => 0.5 - Math.random()).slice(0, 20);
         initGame();
     }
 
-    // 初始化游戏
     function initGame() {
         state.queue = state.bank.map((_, i) => i);
         state.curr = 0;
@@ -806,18 +1405,16 @@
         document.getElementById('gameBadge').textContent = `${state.curr + 1} / ${state.queue.length}`;
         document.getElementById('progressBar').style.width = `${(state.curr / state.queue.length)*100}%`;
 
-        // 难度逻辑
         let hideRatio = 0.3;
         let isHell = false;
         if(state.diff === 'hard') hideRatio = 0.7;
         if(state.diff === 'hell') isHell = true;
 
-        const cleanEn = w.en.replace(/[^a-zA-Z]/g, ''); // 纯字母
+        const cleanEn = w.en.replace(/[^a-zA-Z]/g, '');
         let hideCount = Math.ceil(cleanEn.length * hideRatio);
         if(isHell) hideCount = Math.max(cleanEn.length - 1, 1);
         else hideCount = Math.max(hideCount, 1);
 
-        // 决定隐藏的索引
         let indices = [];
         for(let i=0; i<w.en.length; i++) if(/[a-zA-Z]/.test(w.en[i])) indices.push(i);
         indices.sort(() => Math.random() - 0.5);
@@ -826,29 +1423,42 @@
         const box = document.getElementById('inputBox');
         box.innerHTML = '';
         
+        // --- 长单词优化 ---
+        const wordLen = w.en.length;
+        let boxClass = 'char-box';
+        if(wordLen > 12) boxClass += ' super-compact';
+        else if(wordLen > 8) boxClass += ' compact';
+
+        if (wordLen * (wordLen > 8 ? 36 : 46) > window.innerWidth * 0.9) {
+            box.classList.add('overflowing');
+        } else {
+            box.classList.remove('overflowing');
+        }
+
         for(let i=0; i<w.en.length; i++) {
             const char = w.en[i];
             if(!/[a-zA-Z]/.test(char)) {
-                // 标点/空格
                 const div = document.createElement('div');
-                div.className = char === ' ' ? 'char-box space' : 'char-box static';
+                div.className = char === ' ' ? 'char-box space' : `${boxClass} static`;
                 div.textContent = char;
                 box.appendChild(div);
             } else if(hiddenSet.has(i)) {
                 const inp = document.createElement('input');
-                inp.className = 'char-box';
+                inp.className = boxClass;
                 inp.maxLength = 1;
                 inp.dataset.ans = char.toLowerCase();
                 
-                // --- 核心优化：键盘与输入体验 ---
-                inp.lang = 'en'; // 暗示英文
+                // iOS 键盘优化
+                inp.type = 'search'; 
+                inp.setAttribute('pattern', '[a-zA-Z]*');
+                inp.setAttribute('inputmode', 'text');
                 inp.setAttribute('autocomplete', 'off');
                 inp.setAttribute('autocorrect', 'off');
                 inp.setAttribute('autocapitalize', 'off');
                 inp.setAttribute('spellcheck', 'false');
-                inp.type = 'text'; // 标准文本，兼顾兼容性
 
                 inp.oninput = (e) => {
+                    if(/[^\x00-\xff]/.test(e.target.value)) { e.target.value = ''; return; }
                     if(e.target.value.length === 1) nextFocus(e.target);
                 };
                 inp.onkeydown = (e) => {
@@ -858,7 +1468,7 @@
                 box.appendChild(inp);
             } else {
                 const div = document.createElement('div');
-                div.className = 'char-box static';
+                div.className = `${boxClass} static`;
                 div.textContent = char;
                 box.appendChild(div);
             }
@@ -872,18 +1482,12 @@
 
     function nextFocus(el) {
         let n = el.nextElementSibling;
-        while(n) {
-            if(n.tagName === 'INPUT') { n.focus(); break; }
-            n = n.nextElementSibling;
-        }
+        while(n) { if(n.tagName === 'INPUT') { n.focus(); break; } n = n.nextElementSibling; }
     }
     
     function prevFocus(el) {
         let p = el.previousElementSibling;
-        while(p) {
-            if(p.tagName === 'INPUT') { p.focus(); break; }
-            p = p.previousElementSibling;
-        }
+        while(p) { if(p.tagName === 'INPUT') { p.focus(); break; } p = p.previousElementSibling; }
     }
 
     function hint() {
@@ -891,8 +1495,7 @@
         const empty = inps.find(i => !i.value) || inps.find(i => i.value.toLowerCase() !== i.dataset.ans);
         if(empty) {
             empty.value = empty.dataset.ans;
-            empty.classList.add('static'); // 提示后变灰
-            // 记为错题（用了提示就算不会）
+            empty.classList.add('static'); 
             markWrong(); 
             nextFocus(empty);
         }
@@ -900,9 +1503,7 @@
 
     function markWrong() {
         const idx = state.bank[state.queue[state.curr]];
-        // Session 级记录
         if(!state.sessionWrongs.includes(idx)) state.sessionWrongs.push(idx);
-        // Global 级记录 (去重)
         const exists = globalWrongBank.some(w => w.en === idx.en);
         if(!exists) {
             globalWrongBank.push(idx);
@@ -927,15 +1528,11 @@
         if(allRight) {
             playTone(800);
             if(state.mode === 'review') {
-                // 如果是复习模式且答对了，从错题本移除该词
                 const currentWord = state.bank[state.queue[state.curr]];
                 globalWrongBank = globalWrongBank.filter(w => w.en !== currentWord.en);
                 localStorage.setItem('globalWrongBank', JSON.stringify(globalWrongBank));
             }
-            setTimeout(() => {
-                state.curr++;
-                render();
-            }, 800);
+            setTimeout(() => { state.curr++; render(); }, 800);
         } else {
             playTone(200);
             markWrong();
@@ -946,20 +1543,19 @@
         switchSection('resultArea');
         const total = state.queue.length;
         const wrongs = state.sessionWrongs.length;
-        const score = Math.round(((total - wrongs)/total)*100);
+        const score = total === 0 ? 0 : Math.round(((total - wrongs)/total)*100);
         
         document.getElementById('scoreVal').textContent = score;
-        document.getElementById('resultTitle').textContent = score === 100 ? "Perfect!" : "Good Job!";
-        document.getElementById('resultMsg').textContent = `本次做错 ${wrongs} 个单词，已自动加入错题本。`;
+        document.getElementById('resultTitle').textContent = score === 100 ? "Perfect!" : "Keep Going!";
+        document.getElementById('resultMsg').textContent = `本次训练结束，做错 ${wrongs} 词`;
 
         const list = document.getElementById('wrongList');
         if(wrongs > 0) {
             list.style.display = 'block';
-            list.innerHTML = state.sessionWrongs.map(w => `<div><strong>${w.en}</strong> ${w.cn}</div>`).join('');
+            list.innerHTML = state.sessionWrongs.map(w => `<div><strong>${w.en}</strong> <span style='color:#888'>${w.cn}</span></div>`).join('');
         } else {
             list.style.display = 'none';
         }
-        
         updateWrongCount();
     }
 
@@ -975,14 +1571,14 @@
 
     function restartSession() {
         if(state.mode === 'review') startReviewSession();
-        else startSession(state.bank === db.vol1 ? 'vol1' : 'vol2'); // 简单判断重开哪本
+        else startSession(state.bank === db.vol5 ? 'vol5' : (state.bank === db.vol6_1 ? 'vol6_1' : 'vol6_2'));
     }
 
     function updateWrongCount() {
         const count = globalWrongBank.length;
         const label = document.getElementById('wrongCountLabel');
         label.textContent = count > 0 ? `${count} 个待复习` : "暂无错题";
-        label.style.color = count > 0 ? "#d63031" : "#b2bec3";
+        label.style.color = count > 0 ? "#fff" : "rgba(255,255,255,0.8)";
     }
 
     // Audio Context
@@ -1003,23 +1599,11 @@
         speechSynthesis.speak(u);
     }
     
-    function toggleSound() {
-        // 简单开关逻辑省略，默认开启
-    }
-
-    function toggleModal(show) {
-        const m = document.getElementById('noteModal');
-        m.className = show ? 'modal open' : 'modal';
-    }
-
-    function handleFile(input) {
-        // 兼容之前的上传逻辑，略
-        alert("暂未实现自定义上传，请使用内置题库。");
-    }
+    function toggleSound() {} 
+    function toggleModal(show) { document.getElementById('noteModal').className = show ? 'modal open' : 'modal'; }
 
     // Init
     updateWrongCount();
-
 </script>
 </body>
 </html>
